@@ -1,0 +1,19 @@
+
+div.plot-container.plotly {
+  background: #201f34!important;
+}
+/*
+svg.main-svg {
+  background: #201f34!important;  
+}*/
+
+text.gtitle {
+  fill: rgb(66 181 123)!important;
+  font-size: 24pt!important;
+  font-weight: 800!important;
+}
+
+:root[data-theme="dark"] 
+div.plot-container.plotly {
+    filter: invert(100%) hue-rotate(180deg);
+}
