@@ -133,13 +133,13 @@
 			let lines = originalText.split("\n");
 
 			let updated = lines.map(line => {
-				return line.replace(/\[(.*?) -->(.*?) \]/, (m,start,end)=>{
+				return line.replace(/\[(.*?) --> (.*?)\]/, (m, start, end) => {
             return `[${formatTime(parseTime(start) + offsetMs)} --> ${formatTime(parseTime(end) + offsetMs)}]`;
-			});
-		}).join("\n");
-
-		renderHighlighted(updated);
-}
+				});
+			}).join("\n");
+			
+			renderHighlighted(updated);
+		}
 
 		function renderHighlighted(text) {
 			const TS_COLOR = "#5ae2e2";
