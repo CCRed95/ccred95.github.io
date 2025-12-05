@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Transcript Timestamp Offset Tool</title>
+	<style>
+		body {
+			margin: 0;
+			background: #0D1117;
+			color: #a7e8e8;
+			font-family: Consolas, monospace;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+		header {
+			background: #161b22;
+			padding: 14px;
+			font-size: 32px;
+			text-align: center;
+			border-bottom: 1px solid #30363d;
+		}
+		#dropZone {
+			border: 2px dashed #4f79ff;
+			padding: 40px;
+			margin: 15px;
+			border-radius: 6px;
+			text-align: center;
+			font-size: 18px;
+			color: #8ab4f8;
+		}
+		#controls {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			padding: 10px 15px;
+			border-bottom: 1px solid #30363d;
+			background: #0f141a;
+		}
+		input, button {
+			padding: 8px 12px;
+			border-radius: 5px;
+			border: none;
+			font-size: 14px;
+			font-family: Consolas, monospace;
+		}
+		input {
+			background: #1b1f24;
+			color: #fff;
+			border: 1px solid #30363d;
+			width: 150px;
+		}
+		button {
+			background: #2c629d;
+			color: white;
+			cursor: pointer;
+			font-weight: bold;
+			transition: 0.2s;
+		}
+		button:hover {
+			background: #4683c5;
+		}
+		#saveBtn {
+			background: #8250df;
+		}
+		#saveBtn:hover {
+			background: #9866ff;
+		}
+		#viewer {
+			flex: 1;
+			overflow: auto;
+			padding: 15px;
+			white-space: pre;
+			font-size: 14px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header>Transcript Timestamp Offset Tool</header>
+
+	<div id="dropZone">Drag & drop transcript.txt here</div>
+
+	<div id="controls" style="display:none;">
+		Offset (HH:MM:SS or MM:SS):
+		<input type="text" id="offsetInput" placeholder="1:24:14">
+		<button onclick="applyOffset()">Apply Offset</button>
+		<button id="saveBtn" onclick="saveFile()">Download Offset File</button>
+	</div>
+
+	<pre id="viewer">(no file loaded)</pre>
+
+	<script>
+		let originalText = "";
+		let filename = "transcript";
+
+		document.getElementById("dropZone").addEventListener("dragover", e => e.preventDefault());
+
+		document.getElementById("dropZone").addEventListener("drop", function (e) {
+			e.preventDefault();
+			let file = e.dataTransfer.files[0];
+			filename = file.name.replace(/\.[^/.]+$/, "");
+
+			const reader = new FileReader();
+			reader.onload = evt => {
+				originalText = evt.target.result;
+				renderHighlighted(originalText);
+				document.getElementById("controls").style.display = "flex";
+			};
+			reader.readAsText(file);
+		});
+
+		function parseTime(ts) {
+			let parts = ts.split(":").map(Number);
+			if (parts.length === 2) parts = [0, ...parts];
+			let [h, m, s] = parts;
+			return ((h * 3600) + (m * 60) + s) * 1000;
+		}
+
+		function formatTime(ms) {
+			let h = Math.floor(ms / 3600000);
+			ms %= 3600000;
+			let m = Math.floor(ms / 60000);
+			ms %= 60000;
+			let s = (ms / 1000).toFixed(3);
+			return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(6, '0')}`;
+		}
+
+		function applyOffset() {
+			let offsetMs = parseTime(document.getElementById("offsetInput").value.trim());
+			let lines = originalText.split("\n");
+
+			let updated = lines.map(line => {
+				return line.replace(/\[(.*?) -->(.*?) \]/, (m,start,end)=>{
+            return `[${formatTime(parseTime(start) + offsetMs)} --> ${formatTime(parseTime(end) + offsetMs)}]`;
+			});
+		}).join("\n");
+
+		renderHighlighted(updated);
+}
+
+		function renderHighlighted(text) {
+			const TS_COLOR = "#5ae2e2";
+			const TEXT_COLOR = "#d184e0";
+
+			const escapeHtml = s =>
+				s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+
+			const highlighted = text
+				.split("\n")
+				.map(rawLine => {
+					const line = rawLine.replace(/\r$/, "");
+					const m = line.match(/^(\[[^\]]+\])(\s*)(.*)$/);
+					if (!m) {
+						return escapeHtml(rawLine);
+					}
+
+					const [, ts, spaces, content] = m;
+					return `<span style="color:${TS_COLOR}">${escapeHtml(ts)}</span>` +
+						spaces +
+						`<span style="color:${TEXT_COLOR}">${escapeHtml(content)}</span>`;
+				})
+				.join("\n");
+
+			document.getElementById("viewer").innerHTML = highlighted;
+		}
+
+		function saveFile() {
+			let blob = new Blob([document.getElementById("viewer").innerText], { type: "text/plain" });
+			let a = document.createElement("a");
+			a.href = URL.createObjectURL(blob);
+			a.download = filename + ".offset.txt";
+			a.click();
+		}
+	</script>
+</body>
+
+</html>
