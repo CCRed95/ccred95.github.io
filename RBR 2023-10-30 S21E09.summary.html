@@ -1,0 +1,1491 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Redbar Episode Summary - RBR 2023-10-30 S21E09.summary.json</title>
+  <style>
+
+:root{
+  --bg:#0b0d10;
+  --panel:#0f1217;
+  --panel2:#121721;
+  --border:#232a36;
+  --text:#e7ecf4;
+  --muted:#9aa6ba;
+  --muted2:#6f7c92;
+  --accent:#ff3b3b;
+  --accent2:#ff6b6b;
+  --good:#4ade80;
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --radius: 18px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(900px 600px at 15% 0%, rgba(255,59,59,.18), transparent 60%),
+    radial-gradient(700px 500px at 85% 10%, rgba(255,107,107,.10), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, rgba(90,140,255,.06), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.35;
+}
+
+.wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 18px 44px;
+}
+
+.topbar{
+  position: sticky;
+  top:0;
+  z-index:20;
+  background: rgba(11,13,16,.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(35,42,54,.8);
+}
+
+.topbar .wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 14px 18px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width: 220px;
+}
+
+.dot{
+  width:12px;height:12px;border-radius:99px;
+  background: linear-gradient(180deg, var(--accent2), var(--accent));
+  box-shadow: 0 0 0 6px rgba(255,59,59,.10);
+}
+
+.brandText{
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size: 13px;
+}
+
+.muted{ color: var(--muted); font-weight:600; letter-spacing: normal; text-transform:none; }
+
+.file{
+  color: var(--muted2);
+  font-family: var(--mono);
+  font-size: 12px;
+  border: 1px solid rgba(35,42,54,.85);
+  background: rgba(15,18,23,.8);
+  padding: 8px 10px;
+  border-radius: 12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width: 52vw;
+}
+
+.card{
+  background: linear-gradient(180deg, rgba(18,23,33,.92), rgba(15,18,23,.88));
+  border: 1px solid rgba(35,42,54,.95);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 18px 16px;
+  margin: 18px 0;
+}
+
+.cardHead{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 10px;
+}
+
+.hTitle{
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing:.2px;
+}
+
+.hint{
+  color: var(--muted2);
+  font-size: 12px;
+}
+
+.pill{
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid rgba(35,42,54,.9);
+  background: rgba(11,13,16,.55);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+}
+
+.summary{
+  color: var(--text);
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(35,42,54,.9);
+  background: rgba(11,13,16,.35);
+}
+
+.topicCloud{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  padding: 8px 2px 2px;
+}
+
+.topic{
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(11,13,16,.40);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--muted);
+  font-family: var(--mono);
+  line-height:1;
+}
+
+.topicXL{ font-size: 14px; color: #ffd1d1; border-color: rgba(255,59,59,.35); background: rgba(255,59,59,.12); }
+.topicL { font-size: 13px; color: #ffe0e0; border-color: rgba(255,59,59,.28); background: rgba(255,59,59,.08); }
+.topicM { font-size: 12px; }
+.topicS { font-size: 11px; color: var(--muted2); }
+
+.segList{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top: 6px;
+}
+
+.seg{
+  border: 1px solid rgba(35,42,54,.92);
+  background: rgba(11,13,16,.30);
+  border-radius: 16px;
+  padding: 12px 12px;
+  cursor: pointer;
+  transition: transform .08s ease, border-color .08s ease, background .08s ease;
+}
+
+.seg:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,59,59,.35);
+  background: rgba(11,13,16,.45);
+}
+
+.seg:active{
+  transform: translateY(0px);
+}
+
+.segRow{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.segIndex{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #ffd1d1;
+  background: rgba(255,59,59,.12);
+  border: 1px solid rgba(255,59,59,.25);
+  flex: 0 0 auto;
+}
+
+.segMain{ flex: 1 1 auto; min-width: 0; }
+
+.segTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.segTitle{
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: .2px;
+  color: var(--text);
+  min-width: 0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.segRange{
+  flex: 0 0 auto;
+}
+
+.kbd{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(15,18,23,.75);
+  padding: 6px 8px;
+  border-radius: 10px;
+  white-space:nowrap;
+}
+
+.segDesc{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chips{
+  margin-top: 10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.chip{
+  font-size: 12px;
+  font-family: var(--mono);
+  border-radius: 999px;
+  padding: 6px 9px;
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(15,18,23,.65);
+  color: var(--muted);
+  line-height: 1;
+}
+
+.chipTarget{
+  color: #cde6ff;
+  border-color: rgba(90,140,255,.32);
+  background: rgba(90,140,255,.10);
+}
+
+.chipTag{
+  color: #ffe0e0;
+  border-color: rgba(255,59,59,.28);
+  background: rgba(255,59,59,.08);
+}
+
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 10px 12px;
+  background: rgba(15,18,23,.92);
+  border: 1px solid rgba(35,42,54,.95);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  opacity: 0;
+  pointer-events:none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="dot"></div>
+        <div class="brandText">REDBAR <span class="muted">AI GENERATIVE SUMMARY</span></div>
+      </div>
+      <div class="file">RBR 2023-10-30 S21E09.summary.json</div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="card">
+      <div class="cardHead">
+        <div class="hTitle">Episode Summary</div>
+        <div class="pill">64 segments</div>
+      </div>
+      <div class="summary">Mike returns after being sick and opens with travel stories from Denver, including Red Rocks footage and a confrontation at a Flume show. The episode pivots into clip-watching: war-discourse crying segments (Ethan Klein/Hasan), Matthew Perry’s strange Instagram posts and conspiracy coverage, and a run of comedy-world targets (Rogan, Stanhope, Skankfest/Joke World, Tim Dillon, Kill Tony). The back half becomes a "Redbar in the Wild" compilation (Maron, Malak, heckles) before ending on joke-theft comparisons and Kill Tony breakdowns.</div>
+    </section>
+    <section class="card">
+      <div class="cardHead">
+        <div class="hTitle">Topic Map</div>
+        <div class="pill">ranked</div>
+      </div>
+      <div class="topicCloud">
+        <span class="topic topicXL">Tim Dillon heckle</span>
+        <span class="topic topicXL">Taryn Manning</span>
+        <span class="topic topicXL">Kill Tony</span>
+        <span class="topic topicL">Joe Rogan</span>
+        <span class="topic topicL">Matthew Perry</span>
+        <span class="topic topicL">Joke World</span>
+        <span class="topic topicL">Skankfest</span>
+        <span class="topic topicM">Doug Stanhope</span>
+        <span class="topic topicM">Redbar in the Wild</span>
+        <span class="topic topicM">Ethan Klein</span>
+        <span class="topic topicM">Hasan Piker</span>
+        <span class="topic topicM">Tom Segura</span>
+        <span class="topic topicM">Bert Kreischer</span>
+        <span class="topic topicS">Andrew Santino</span>
+        <span class="topic topicS">Hila Klein</span>
+        <span class="topic topicS">Road Dogs trailer</span>
+        <span class="topic topicS">Redban</span>
+        <span class="topic topicS">Red Rocks</span>
+        <span class="topic topicS">Flume concert</span>
+        <span class="topic topicS">War discourse</span>
+        <span class="topic topicS">Drive My Car</span>
+        <span class="topic topicS">Mark Maron</span>
+        <span class="topic topicS">Mike Malak</span>
+        <span class="topic topicS">Bill Maher</span>
+        <span class="topic topicS">Candace Owens</span>
+        <span class="topic topicS">Russell Brand</span>
+        <span class="topic topicS">Sleepaway Camp</span>
+        <span class="topic topicS">Dave Smith</span>
+        <span class="topic topicS">Propagandhi</span>
+        <span class="topic topicS">Scars Club</span>
+      </div>
+    </section>
+    <section class="card">
+      <div class="cardHead">
+        <div class="hTitle">Segments</div>
+        <div class="hint">click a segment to copy its time range</div>
+      </div>
+      <div class="segList">
+        <article class="seg" data-range="00:00:00 - 00:01:19">
+          <div class="segRow">
+            <div class="segIndex">1</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Cold open chant</div>
+                <div class="segRange"><span class="kbd">00:00:00 - 00:01:19</span></div>
+              </div>
+              <div class="segDesc">The show opens with repeated ominous phrases before Mike begins speaking.</div>
+              <div class="chips">
+                <span class="chip chipTag">Show Open</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:01:19 - 00:03:31">
+          <div class="segRow">
+            <div class="segIndex">2</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Back from being sick + war baby prop</div>
+                <div class="segRange"><span class="kbd">00:01:19 - 00:03:31</span></div>
+              </div>
+              <div class="segDesc">Mike returns after being sick, brings in Jules, and riffs on a Spirit Halloween dead-baby prop while noting the bomb SFX is discontinued.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Jules</span>
+                <span class="chip chipTarget">Spirit Halloween</span>
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:03:31 - 00:07:20">
+          <div class="segRow">
+            <div class="segIndex">3</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">First drink + band intro</div>
+                <div class="segRange"><span class="kbd">00:03:31 - 00:07:20</span></div>
+              </div>
+              <div class="segDesc">They do a welcome-back drink to music, shout out “Scary Perry,” and joke about bringing ska punk back.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Jules</span>
+                <span class="chip chipTarget">The Chilled Monkey Brains</span>
+                <span class="chip chipTarget">Scary Perry</span>
+                <span class="chip chipTarget">George Janko</span>
+                <span class="chip chipTag">Drink</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:07:20 - 00:12:05">
+          <div class="segRow">
+            <div class="segIndex">4</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Show teases: Perry, Segura, Santino, Congdon</div>
+                <div class="segRange"><span class="kbd">00:07:20 - 00:12:05</span></div>
+              </div>
+              <div class="segDesc">Mike promises scoops (Matthew Perry, Andrew Santino) and upcoming topics (Tom Segura downfall, Kim Congdon) while joking about “What is Gaza?”</div>
+              <div class="chips">
+                <span class="chip chipTarget">Matthew Perry</span>
+                <span class="chip chipTarget">Tom Segura</span>
+                <span class="chip chipTarget">Andrew Santino</span>
+                <span class="chip chipTarget">Kim Congdon</span>
+                <span class="chip chipTag">Investigation</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:12:05 - 00:18:20">
+          <div class="segRow">
+            <div class="segIndex">5</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">War takes + Kuwait movie theater riff</div>
+                <div class="segRange"><span class="kbd">00:12:05 - 00:18:20</span></div>
+              </div>
+              <div class="segDesc">Mike mocks online war discourse, describes seeing protests, and detours into Kuwait banning “Talk To Me” and whether Kuwait even has theaters.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Keemstar</span>
+                <span class="chip chipTarget">Hasan Piker</span>
+                <span class="chip chipTarget">Ethan Klein</span>
+                <span class="chip chipTarget">Talk To Me</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:18:20 - 00:24:39">
+          <div class="segRow">
+            <div class="segIndex">6</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Sick month + Denver trip setup</div>
+                <div class="segRange"><span class="kbd">00:18:20 - 00:24:39</span></div>
+              </div>
+              <div class="segDesc">He explains disappearing when sick, thanks members, then starts the story: flying to Denver, renting a Defender, and staying in Cherry Creek.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Jules</span>
+                <span class="chip chipTarget">Red Rocks Amphitheater</span>
+                <span class="chip chipTarget">Flume</span>
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:24:39 - 00:26:41">
+          <div class="segRow">
+            <div class="segIndex">7</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Denver weed shop mushroom hookup</div>
+                <div class="segRange"><span class="kbd">00:24:39 - 00:26:41</span></div>
+              </div>
+              <div class="segDesc">Jules asks a weed-store clerk for mushrooms, leading to a back-alley meetup and Mike’s microdose-style mushroom routine.</div>
+              <div class="chips">
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:26:41 - 00:33:06">
+          <div class="segRow">
+            <div class="segIndex">8</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Denver airport crowds + COVID spiral</div>
+                <div class="segRange"><span class="kbd">00:26:41 - 00:33:06</span></div>
+              </div>
+              <div class="segDesc">Mike complains about Denver airport logistics, says the group got COVID, and describes fear of doctors, rehab, and a workout triggering a fever.</div>
+              <div class="chips">
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:33:06 - 00:36:28">
+          <div class="segRow">
+            <div class="segIndex">9</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Whippets, drugs, and the first Rise</div>
+                <div class="segRange"><span class="kbd">00:33:06 - 00:36:28</span></div>
+              </div>
+              <div class="segDesc">He admits doing whippets and other drugs in Denver, then launches the “Rise” segment and declares the new slogan “Redbar, no rules.”</div>
+              <div class="chips">
+                <span class="chip chipTag">Rise</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:36:28 - 00:37:49">
+          <div class="segRow">
+            <div class="segIndex">10</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">BBG chatter + no more URLs</div>
+                <div class="segRange"><span class="kbd">00:36:28 - 00:37:49</span></div>
+              </div>
+              <div class="segDesc">Mike reacts to Leo Dominique and Facebook group drama, then says he’s done reading URLs and wants a voice assistant for promos.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Leo Dominique</span>
+                <span class="chip chipTarget">Redbar BBG</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:37:49 - 00:51:53">
+          <div class="segRow">
+            <div class="segIndex">11</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Red Rocks seating + Flume douche in matching shirt</div>
+                <div class="segRange"><span class="kbd">00:37:49 - 00:51:53</span></div>
+              </div>
+              <div class="segDesc">Mike shows Red Rocks photos and videos, rants about a guy blocking his view and dancing obnoxiously, and recounts confronting him during the show.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Flume</span>
+                <span class="chip chipTarget">Red Rocks Amphitheater</span>
+                <span class="chip chipTarget">Jules</span>
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:51:53 - 00:58:16">
+          <div class="segRow">
+            <div class="segIndex">12</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">No skipping + “scarier than Gaza” map bit</div>
+                <div class="segRange"><span class="kbd">00:51:53 - 00:58:16</span></div>
+              </div>
+              <div class="segDesc">He complains about people wanting bookmarks, then pulls up a Gaza map and scrolls the coastline while riffing on geography and ignorance.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Jules</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="00:58:16 - 01:06:16">
+          <div class="segRow">
+            <div class="segIndex">13</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Propagandhi “Gaza Strip” song + Abrams method setup</div>
+                <div class="segRange"><span class="kbd">00:58:16 - 01:06:16</span></div>
+              </div>
+              <div class="segDesc">Mike plays Propagandhi, claims it taught him the topic, then sets up clips of Ethan Klein and Hasan using the “Abrams method” to cry on camera.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Propagandhi</span>
+                <span class="chip chipTarget">Ethan Klein</span>
+                <span class="chip chipTarget">Hasan Piker</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:06:16 - 01:17:48">
+          <div class="segRow">
+            <div class="segIndex">14</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Ethan Klein crying clip + retinol eye rant</div>
+                <div class="segRange"><span class="kbd">01:06:16 - 01:17:48</span></div>
+              </div>
+              <div class="segDesc">Mike plays an H3/Leftovers clip of Ethan getting emotional, mocks it as acting, and claims Ethan’s red eyes are from misusing strong retinol.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Ethan Klein</span>
+                <span class="chip chipTarget">H3</span>
+                <span class="chip chipTarget">Leftovers</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:17:48 - 01:23:57">
+          <div class="segRow">
+            <div class="segIndex">15</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Hasan crying clip + casket/flag riff</div>
+                <div class="segRange"><span class="kbd">01:17:48 - 01:23:57</span></div>
+              </div>
+              <div class="segDesc">Mike plays Hasan’s emotional story, critiques his “push to tear” technique, and riffs on funeral flags and how they can afford a casket.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Hasan Piker</span>
+                <span class="chip chipTarget">Ethan Klein</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:23:57 - 01:24:41">
+          <div class="segRow">
+            <div class="segIndex">16</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Second drink to “All the Things She Said”</div>
+                <div class="segRange"><span class="kbd">01:23:57 - 01:24:41</span></div>
+              </div>
+              <div class="segDesc">They toast again while playing “All the Things She Said,” which Mike says also played at the Flume concert.</div>
+              <div class="chips">
+                <span class="chip chipTag">Drink</span>
+                <span class="chip chipTag">Song</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:24:41 - 01:39:18">
+          <div class="segRow">
+            <div class="segIndex">17</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Matthew Perry “Mat Man” Instagram mystery</div>
+                <div class="segRange"><span class="kbd">01:24:41 - 01:39:18</span></div>
+              </div>
+              <div class="segDesc">Mike investigates Perry’s odd Instagram posts (Batman screens, bat signal, cranberries, moon, hot tub), reads comments framing them as distress signals, and recaps questions about accident vs foul play.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Matthew Perry</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:39:18 - 01:41:15">
+          <div class="segRow">
+            <div class="segIndex">18</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">George Janko vs Big Mike tweet drama</div>
+                <div class="segRange"><span class="kbd">01:39:18 - 01:41:15</span></div>
+              </div>
+              <div class="segDesc">They read a pre-death Twitter exchange where George Janko tells “Big Mike” to stop implying they’re friends, then Mike mocks the sudden “friendship matters” pivot.</div>
+              <div class="chips">
+                <span class="chip chipTarget">George Janko</span>
+                <span class="chip chipTarget">Big Mike</span>
+                <span class="chip chipTarget">Logan Paul</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:41:35 - 01:52:17">
+          <div class="segRow">
+            <div class="segIndex">19</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Ritual Code Blue conspiracy video</div>
+                <div class="segRange"><span class="kbd">01:41:35 - 01:52:17</span></div>
+              </div>
+              <div class="segDesc">Mike plays and riffs on a “Ritual Code Blue” YouTube clip tying Perry’s death to eclipses, drowning rituals, gematria, and color symbolism.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Ritual Code Blue</span>
+                <span class="chip chipTarget">Matthew Perry</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:52:17 - 01:53:00">
+          <div class="segRow">
+            <div class="segIndex">20</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">RIP posts pet peeve</div>
+                <div class="segRange"><span class="kbd">01:52:17 - 01:53:00</span></div>
+              </div>
+              <div class="segDesc">Mike complains about people posting “R.I.P.” and cites Rainn Wilson’s Instagram message as an example he finds insensitive.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Rainn Wilson</span>
+                <span class="chip chipTarget">Matthew Perry</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:53:00 - 01:56:49">
+          <div class="segRow">
+            <div class="segIndex">21</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Hostbusters praises Redbar</div>
+                <div class="segRange"><span class="kbd">01:53:00 - 01:56:49</span></div>
+              </div>
+              <div class="segDesc">Mike plays a Hostbusters/HB Prime video listing compliments about Redbar’s set, merch, bits, and tech, and reacts to each point.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Hostbusters</span>
+                <span class="chip chipTarget">HB Prime</span>
+                <span class="chip chipTarget">Redbar</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="01:56:49 - 02:02:25">
+          <div class="segRow">
+            <div class="segIndex">22</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Hila Klein IDF photo prank reveal</div>
+                <div class="segRange"><span class="kbd">01:56:49 - 02:02:25</span></div>
+              </div>
+              <div class="segDesc">Mike launches into Hila Klein “IDF photos” then reveals the images are actually from Sleepaway Camp, pivoting into horror talk.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Hila Klein</span>
+                <span class="chip chipTarget">H3</span>
+                <span class="chip chipTarget">Sleepaway Camp</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:02:25 - 02:04:24">
+          <div class="segRow">
+            <div class="segIndex">23</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Sleepaway Camp 1–3 breakdown</div>
+                <div class="segRange"><span class="kbd">02:02:25 - 02:04:24</span></div>
+              </div>
+              <div class="segDesc">They discuss rewatching Sleepaway Camp movies, praising part 3 while mocking the low-effort stick kills and other over-the-top deaths.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Sleepaway Camp</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:04:24 - 02:08:19">
+          <div class="segRow">
+            <div class="segIndex">24</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Hila Klein “get ready with me” clip</div>
+                <div class="segRange"><span class="kbd">02:04:24 - 02:08:19</span></div>
+              </div>
+              <div class="segDesc">Mike watches a Hila Klein closet “get ready with me” video, critiques the outfit and boots, and riffs on her vibe and presentation.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Hila Klein</span>
+                <span class="chip chipTarget">H3</span>
+                <span class="chip chipTarget">h3snarkreddit</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:08:19 - 02:12:07">
+          <div class="segRow">
+            <div class="segIndex">25</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Andrew Santino history and “Report it” song</div>
+                <div class="segRange"><span class="kbd">02:08:19 - 02:12:07</span></div>
+              </div>
+              <div class="segDesc">Mike sets up a Santino segment, revisits cheating rumors and past beef, then plays the “We know, report it” remix mocking Santino.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Andrew Santino</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:12:07 - 02:22:15">
+          <div class="segRow">
+            <div class="segIndex">26</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Santino DM scoop via Cancelled</div>
+                <div class="segRange"><span class="kbd">02:12:07 - 02:22:15</span></div>
+              </div>
+              <div class="segDesc">They watch Cancelled clips where Tana implies a married comedian DM’d her, then connect it to an older Whitney episode naming Andrew Santino.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Cancelled</span>
+                <span class="chip chipTarget">Tana Mongeau</span>
+                <span class="chip chipTarget">Brooke</span>
+                <span class="chip chipTarget">Whitney Cummings</span>
+                <span class="chip chipTarget">Andrew Santino</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:22:15 - 02:27:50">
+          <div class="segRow">
+            <div class="segIndex">27</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Break music interlude</div>
+                <div class="segRange"><span class="kbd">02:22:15 - 02:27:50</span></div>
+              </div>
+              <div class="segDesc">A long break plays music and audio stings before Mike returns to the mic.</div>
+              <div class="chips">
+                <span class="chip chipTag">Break</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:27:50 - 02:30:33">
+          <div class="segRow">
+            <div class="segIndex">28</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Scars Club plug and season-change warning</div>
+                <div class="segRange"><span class="kbd">02:27:50 - 02:30:33</span></div>
+              </div>
+              <div class="segDesc">Mike plugs Scars Club and delivers a “season change” warning about people getting kooky during fall transitions.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Redbar</span>
+                <span class="chip chipTag">Merch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:30:33 - 02:33:44">
+          <div class="segRow">
+            <div class="segIndex">29</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Taylor Swift Eras movie “cape guy” story</div>
+                <div class="segRange"><span class="kbd">02:30:33 - 02:33:44</span></div>
+              </div>
+              <div class="segDesc">They recount seeing the Eras Tour concert film nearly alone, fearing a caped “shooter” who turns out to be a crying Swiftie in full merch.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taylor Swift</span>
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:33:44 - 02:37:59">
+          <div class="segRow">
+            <div class="segIndex">30</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Lost “Mike Makes Burgers” video update</div>
+                <div class="segRange"><span class="kbd">02:33:44 - 02:37:59</span></div>
+              </div>
+              <div class="segDesc">Mike explains the burger video was lost in a server transfer, says it wasn’t good anyway, and tells fans to stop hunting for it.</div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:38:03 - 02:44:35">
+          <div class="segRow">
+            <div class="segIndex">31</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Russell Brand micro-penis photo hunt</div>
+                <div class="segRange"><span class="kbd">02:38:03 - 02:44:35</span></div>
+              </div>
+              <div class="segDesc">Mike claims old nude protest photos show Russell Brand has a micro-penis, discusses them being scrubbed, then displays a found image and zooms in.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Russell Brand</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:44:35 - 02:47:07">
+          <div class="segRow">
+            <div class="segIndex">32</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Smoke break with new music</div>
+                <div class="segRange"><span class="kbd">02:44:35 - 02:47:07</span></div>
+              </div>
+              <div class="segDesc">Mike smokes a few hits on-air, plays new 2 Chainz and Lil Wayne, and complains modern home-studio recordings sound worse.</div>
+              <div class="chips">
+                <span class="chip chipTarget">2 Chainz</span>
+                <span class="chip chipTarget">Lil Wayne</span>
+                <span class="chip chipTag">Mike Story</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="02:47:07 - 03:06:48">
+          <div class="segRow">
+            <div class="segIndex">33</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Taryn Manning spiral and Bert Kreischer rumor</div>
+                <div class="segRange"><span class="kbd">02:47:07 - 03:06:48</span></div>
+              </div>
+              <div class="segDesc">Mike revisits Taryn Manning’s “Karen” trailer, then plays her TikTok about a married man and “Leanne,” speculating it points to Bert Kreischer and digging through Reddit/IG.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taryn Manning</span>
+                <span class="chip chipTarget">Bert Kreischer</span>
+                <span class="chip chipTarget">Leanne Kreischer</span>
+                <span class="chip chipTarget">Reddit</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:06:48 - 03:07:24">
+          <div class="segRow">
+            <div class="segIndex">34</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Newport Beach transcript hunt</div>
+                <div class="segRange"><span class="kbd">03:06:48 - 03:07:24</span></div>
+              </div>
+              <div class="segDesc">Mike asks viewers to search Two Bears One Cave transcripts and YouTube for Burt mentioning Newport Beach, suggesting AI to find it.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Bert Kreischer</span>
+                <span class="chip chipTarget">Two Bears One Cave</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:07:39 - 03:10:13">
+          <div class="segRow">
+            <div class="segIndex">35</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Taryn rant clip + scrolling her IG</div>
+                <div class="segRange"><span class="kbd">03:07:39 - 03:10:13</span></div>
+              </div>
+              <div class="segDesc">He plays a chaotic Taryn Manning clip, then describes browsing her Instagram and contrasting older polished posts with recent messy, bruised-looking content.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taryn Manning</span>
+                <span class="chip chipTarget">Instagram</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:10:13 - 03:17:29">
+          <div class="segRow">
+            <div class="segIndex">36</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">“Drive My Car” discovery and performance</div>
+                <div class="segRange"><span class="kbd">03:10:13 - 03:17:29</span></div>
+              </div>
+              <div class="segDesc">Mike introduces Taryn singing “Drive My Car,” realizes it’s her own unreleased song, plays the clip, quotes lines, and praises it as an earworm while reenacting the pacing.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taryn Manning</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:17:29 - 03:19:27">
+          <div class="segRow">
+            <div class="segIndex">37</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Hellemark Harley back together</div>
+                <div class="segRange"><span class="kbd">03:17:29 - 03:19:27</span></div>
+              </div>
+              <div class="segDesc">Mike pulls up Hellemark Harley’s post announcing he’s back with his girlfriend and riffs on their public fight history and photos.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Hellemark Harley</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:19:27 - 03:22:16">
+          <div class="segRow">
+            <div class="segIndex">38</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Offer to buy “Drive My Car” masters + nine pill challenge</div>
+                <div class="segRange"><span class="kbd">03:19:27 - 03:22:16</span></div>
+              </div>
+              <div class="segDesc">Mike jokingly pitches Taryn a deal to buy the studio master rights, then an alarm triggers his nine pill challenge and he credits Rick Glassman for the swallowing trick.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taryn Manning</span>
+                <span class="chip chipTarget">Rick Glassman</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:22:16 - 03:27:36">
+          <div class="segRow">
+            <div class="segIndex">39</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Lowered offer, stolen car irony, and “rich trouble” riff</div>
+                <div class="segRange"><span class="kbd">03:22:16 - 03:27:36</span></div>
+              </div>
+              <div class="segDesc">He lowers the offer, jokes about buying masters, notes Taryn’s car was reportedly stolen after posting the song, and riffs on the appeal of watching famous people spiral at home.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Taryn Manning</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:27:36 - 03:37:54">
+          <div class="segRow">
+            <div class="segIndex">40</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Two Bears clip: Taryn rumor + Tom Segura denial analysis</div>
+                <div class="segRange"><span class="kbd">03:27:36 - 03:37:54</span></div>
+              </div>
+              <div class="segDesc">Mike plays Two Bears One Cave discussing the Taryn Manning drama, then scrutinizes Tom Segura’s awkward reaction about following her and mocks the half-denial.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Two Bears One Cave</span>
+                <span class="chip chipTarget">Tom Segura</span>
+                <span class="chip chipTarget">Bert Kreischer</span>
+                <span class="chip chipTarget">Taryn Manning</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="03:37:54 - 04:14:16">
+          <div class="segRow">
+            <div class="segIndex">41</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Rogan in a bad mood: RackaRacka on JRE</div>
+                <div class="segRange"><span class="kbd">03:37:54 - 04:14:16</span></div>
+              </div>
+              <div class="segDesc">Mike tees up a “Papa” Rogan segment, explains his Spotify viewing hack, and plays JRE clips of Rogan shutting down the energetic RackaRacka twins with curt, annoyed responses.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Joe Rogan</span>
+                <span class="chip chipTarget">The Joe Rogan Experience</span>
+                <span class="chip chipTarget">RackaRacka</span>
+                <span class="chip chipTarget">Logan Paul</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="04:14:16 - 04:19:38">
+          <div class="segRow">
+            <div class="segIndex">42</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Break bumper music</div>
+                <div class="segRange"><span class="kbd">04:14:16 - 04:19:38</span></div>
+              </div>
+              <div class="segDesc">A musical interlude plays through the break before Mike returns to the show.</div>
+              <div class="chips">
+                <span class="chip chipTag">Break</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="04:19:38 - 04:38:11">
+          <div class="segRow">
+            <div class="segIndex">43</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Doug Stanhope house fire + Road Dogs trailer + Rogan/Redban reaction</div>
+                <div class="segRange"><span class="kbd">04:19:38 - 04:38:11</span></div>
+              </div>
+              <div class="segDesc">Mike reacts to news of Doug Stanhope’s house burning down, plays and mocks the sentimental Road Dogs trailer, then shows Rogan reacting blankly while Redban pitches it.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Doug Stanhope</span>
+                <span class="chip chipTarget">Road Dogs</span>
+                <span class="chip chipTarget">Joe Rogan</span>
+                <span class="chip chipTarget">Brian Redban</span>
+                <span class="chip chipTarget">The Joe Rogan Experience</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="04:38:11 - 04:41:18">
+          <div class="segRow">
+            <div class="segIndex">44</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Joke World sticker mail reveal</div>
+                <div class="segRange"><span class="kbd">04:38:11 - 04:41:18</span></div>
+              </div>
+              <div class="segDesc">Mike shows the Joke World package with tons of stickers and a handwritten note, praising the effort and explaining how viewers flooded the signup.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Joke World</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="04:41:18 - 04:43:00">
+          <div class="segRow">
+            <div class="segIndex">45</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Sticker backlash bit</div>
+                <div class="segRange"><span class="kbd">04:41:18 - 04:43:00</span></div>
+              </div>
+              <div class="segDesc">He jokes about ripping up the stickers, insults the design, and riffs on “punching down” while still calling the creator a nice kid.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Joke World</span>
+                <span class="chip chipTag">Bits</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="04:43:00 - 05:12:59">
+          <div class="segRow">
+            <div class="segIndex">46</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Joke World at Skankfest: “comicking” and interview cringe</div>
+                <div class="segRange"><span class="kbd">04:43:00 - 05:12:59</span></div>
+              </div>
+              <div class="segDesc">Mike watches Skankfest interview clips, trashes Ian Fidance, introduces “comicking,” fixates on Sam Talent’s forced banter and phrasing, then critiques Doug Stanhope barging in and the camera smoothing/blush.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Joke World</span>
+                <span class="chip chipTarget">Skankfest</span>
+                <span class="chip chipTarget">Sam Talent</span>
+                <span class="chip chipTarget">Ian Fidance</span>
+                <span class="chip chipTarget">Doug Stanhope</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:12:59 - 05:13:00">
+          <div class="segRow">
+            <div class="segIndex">47</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Redbar in the Wild bounty rules</div>
+                <div class="segRange"><span class="kbd">05:12:59 - 05:13:00</span></div>
+              </div>
+              <div class="segDesc">Mike announces $100 rewards for clips of people mentioning Redbar and explains how to capture them.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Redbar</span>
+                <span class="chip chipTag">Announcement</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:13:00 - 05:20:53">
+          <div class="segRow">
+            <div class="segIndex">48</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Mark Maron Instagram Live: “relentless”</div>
+                <div class="segRange"><span class="kbd">05:13:00 - 05:20:53</span></div>
+              </div>
+              <div class="segDesc">Mike plays Mark Maron responding to a chat prompt about Redbar, then reacts to Maron calling him an on-purpose douchebag and “relentless.”</div>
+              <div class="chips">
+                <span class="chip chipTarget">Mark Maron</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:20:53 - 05:34:12">
+          <div class="segRow">
+            <div class="segIndex">49</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Skankfest secret show account: Ari praises Redbar</div>
+                <div class="segRange"><span class="kbd">05:20:53 - 05:34:12</span></div>
+              </div>
+              <div class="segDesc">Mike reads a witness report about Ari Shafir comparing Matt Rife backlash to Redbar and allegedly saying Redbar is right and funnier than comics.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Skankfest</span>
+                <span class="chip chipTarget">Ari Shaffir</span>
+                <span class="chip chipTarget">Joe DeRosa</span>
+                <span class="chip chipTarget">Tony Hinchcliffe</span>
+                <span class="chip chipTarget">Robert Kelly</span>
+                <span class="chip chipTag">REDBAR IN THE WILD</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:34:12 - 05:39:12">
+          <div class="segRow">
+            <div class="segIndex">50</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Mike Malak mentions Redbar at press event</div>
+                <div class="segRange"><span class="kbd">05:34:12 - 05:39:12</span></div>
+              </div>
+              <div class="segDesc">Mike plays an interview where Mike Malak is asked about fighting “Mike David Redbar,” prompting Malak to ask if he’s still alive and deny caring.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Mike Malak</span>
+                <span class="chip chipTarget">Logan Paul</span>
+                <span class="chip chipTarget">Redbar Radio</span>
+                <span class="chip chipTag">REDBAR IN THE WILD</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:39:14 - 05:53:34">
+          <div class="segRow">
+            <div class="segIndex">51</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Club Random: Bill Maher smokes near pregnant Candace</div>
+                <div class="segRange"><span class="kbd">05:39:14 - 05:53:34</span></div>
+              </div>
+              <div class="segDesc">Mike watches Bill Maher with Candace Owens, tracks Maher lighting a cigar, and highlights comments noticing the smoking during their climate argument.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Bill Maher</span>
+                <span class="chip chipTarget">Candace Owens</span>
+                <span class="chip chipTarget">Club Random</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:53:34 - 05:56:37">
+          <div class="segRow">
+            <div class="segIndex">52</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">“Redbar’s watching” intro and safety caveats</div>
+                <div class="segRange"><span class="kbd">05:53:34 - 05:56:37</span></div>
+              </div>
+              <div class="segDesc">Mike explains the “Redbar’s watching” heckle phenomenon, insists he can’t encourage it, and introduces Tim Dillon as the newest target.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Tim Dillon</span>
+                <span class="chip chipTag">REDBAR IN THE WILD</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="05:56:37 - 06:14:18">
+          <div class="segRow">
+            <div class="segIndex">53</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Tim Dillon heckle tape: replays, zoom-ins, and police aftermath</div>
+                <div class="segRange"><span class="kbd">05:56:37 - 06:14:18</span></div>
+              </div>
+              <div class="segDesc">Mike plays and rewinds footage of a heckler yelling “Redbar’s watching” and “Ben Avery’s got the tapes,” zooms on Dillon’s face and dubs him “Tammy,” then watches the escort-out and police interaction where the cop asks “What is Redbar?”</div>
+              <div class="chips">
+                <span class="chip chipTarget">Tim Dillon</span>
+                <span class="chip chipTarget">Ben Avery</span>
+                <span class="chip chipTarget">Police</span>
+                <span class="chip chipTag">Watch</span>
+                <span class="chip chipTag">REDBAR IN THE WILD</span>
+                <span class="chip chipTag">Bits</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:14:20 - 06:22:12">
+          <div class="segRow">
+            <div class="segIndex">54</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Dave Smith joke theft: setup and comparison</div>
+                <div class="segRange"><span class="kbd">06:14:20 - 06:22:12</span></div>
+              </div>
+              <div class="segDesc">Mike introduces a joke-stealing accusation, plays Dave Smith’s bit from Libertas, then plays Doug Stanhope’s earlier version for comparison.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Dave Smith</span>
+                <span class="chip chipTarget">Doug Stanhope</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:22:12 - 06:27:02">
+          <div class="segRow">
+            <div class="segIndex">55</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Break and return</div>
+                <div class="segRange"><span class="kbd">06:22:12 - 06:27:02</span></div>
+              </div>
+              <div class="segDesc">They go to a long break and come back on mic.</div>
+              <div class="chips">
+                <span class="chip chipTag">Break</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:27:02 - 06:27:54">
+          <div class="segRow">
+            <div class="segIndex">56</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">New studio speakers talk</div>
+                <div class="segRange"><span class="kbd">06:27:02 - 06:27:54</span></div>
+              </div>
+              <div class="segDesc">Mike mentions testing new studio speakers and jokes about inviting listeners for a studio tour to hear them.</div>
+              <div class="chips">
+                <span class="chip chipTag">Smalltalk</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:27:54 - 06:29:40">
+          <div class="segRow">
+            <div class="segIndex">57</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Diamond Dark Dino thanks Redbar</div>
+                <div class="segRange"><span class="kbd">06:27:54 - 06:29:40</span></div>
+              </div>
+              <div class="segDesc">Mike plays a fan video from Diamond Dark Dino crediting Redbar coverage for helping grow his YouTube shorts following.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Diamond Dark Dino</span>
+                <span class="chip chipTag">Watch</span>
+                <span class="chip chipTag">REDBAR IN THE WILD</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:29:40 - 06:31:20">
+          <div class="segRow">
+            <div class="segIndex">58</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Sam Hyde reacts to Redbar</div>
+                <div class="segRange"><span class="kbd">06:29:40 - 06:31:20</span></div>
+              </div>
+              <div class="segDesc">A clip featuring Sam Hyde praises Redbar’s critiques and mentions his Joey Diaz beef, which Mike reacts to.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Sam Hyde</span>
+                <span class="chip chipTarget">Joey Diaz</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:31:20 - 06:35:33">
+          <div class="segRow">
+            <div class="segIndex">59</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Kill Tony setup: Redban and “Rogan’d” warning</div>
+                <div class="segRange"><span class="kbd">06:31:20 - 06:35:33</span></div>
+              </div>
+              <div class="segDesc">Mike pivots to Kill Tony, recaps Redban being pushed off Rogan, and warns Tony Hinchcliffe might do the same to Redban.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Kill Tony</span>
+                <span class="chip chipTarget">Tony Hinchcliffe</span>
+                <span class="chip chipTarget">Redban</span>
+                <span class="chip chipTarget">Joe Rogan</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:35:33 - 06:39:58">
+          <div class="segRow">
+            <div class="segIndex">60</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Kim Congdon “writer’s room” bomb</div>
+                <div class="segRange"><span class="kbd">06:35:33 - 06:39:58</span></div>
+              </div>
+              <div class="segDesc">Mike explains his “writer’s room comic” theory and plays a Kill Tony moment where Kim Congdon delivers a clunky compliment and gets shut down.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Kill Tony</span>
+                <span class="chip chipTarget">Kim Congdon</span>
+                <span class="chip chipTarget">Hans Kim</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:40:00 - 06:45:22">
+          <div class="segRow">
+            <div class="segIndex">61</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Cam Patterson &amp; David Jolly: news scam clip</div>
+                <div class="segRange"><span class="kbd">06:40:00 - 06:45:22</span></div>
+              </div>
+              <div class="segDesc">Mike introduces Cam Patterson’s uncle David Jolly, plays a local news report about an alleged timeshare scam, and ties it to Kill Tony panel booking.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Kill Tony</span>
+                <span class="chip chipTarget">Cam Patterson</span>
+                <span class="chip chipTarget">David Jolly</span>
+                <span class="chip chipTarget">Tony Hinchcliffe</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="06:45:22 - 07:00:43">
+          <div class="segRow">
+            <div class="segIndex">62</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Kill Tony: arena brag, intro, and Tony freakout</div>
+                <div class="segRange"><span class="kbd">06:45:22 - 07:00:43</span></div>
+              </div>
+              <div class="segDesc">Mike plays Kill Tony’s arena ad and intro, then a segment where Tony gets defensive during Eric D. Swann’s interview and unloads on him.</div>
+              <div class="chips">
+                <span class="chip chipTarget">Kill Tony</span>
+                <span class="chip chipTarget">Tony Hinchcliffe</span>
+                <span class="chip chipTarget">Redban</span>
+                <span class="chip chipTarget">Eric D. Swann</span>
+                <span class="chip chipTag">Watch</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="07:00:43 - 07:05:11">
+          <div class="segRow">
+            <div class="segIndex">63</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Break</div>
+                <div class="segRange"><span class="kbd">07:00:43 - 07:05:11</span></div>
+              </div>
+              <div class="segDesc">They cut to another extended break before returning.</div>
+              <div class="chips">
+                <span class="chip chipTag">Break</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="seg" data-range="07:05:11 - 07:07:45">
+          <div class="segRow">
+            <div class="segIndex">64</div>
+            <div class="segMain">
+              <div class="segTop">
+                <div class="segTitle">Show outro song: “Bob” - NOFX Cover</div>
+                <div class="segRange"><span class="kbd">07:05:11 - 07:07:45</span></div>
+              </div>
+              <div class="segDesc">Mike returns and covers the song “Bob” by NOFX to close out the show.</div>
+              <div class="chips">
+                <span class="chip chipTag">Closing Song</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script>
+
+(function(){
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  document.body.appendChild(toast);
+
+  function showToast(text){
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove('show'), 1100);
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast('Copied: ' + text);
+    }catch{
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast('Copied: ' + text);
+    }
+  }
+
+  document.querySelectorAll('.seg').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const r = el.getAttribute('data-range') || '';
+      if(r) copyText(r);
+    });
+  });
+})();
+  </script><div class="toast">Copied: 07:05:11 - 07:07:45</div>
+
+
+</body></html>
