@@ -1,2 +1,1 @@
-# NJF-AI-Model
-AI Model Visualization of America First
+AI Model Summaries of Redbar Radio
