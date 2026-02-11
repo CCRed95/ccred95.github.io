@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AF Summaries (14)</title>
+  <style>
+
+:root{
+  --bg:#0b0d10;
+  --panel:#0f1217;
+  --panel2:#121721;
+  --border:#232a36;
+  --text:#e7ecf4;
+  --muted:#9aa6ba;
+  --muted2:#6f7c92;
+  --accent:#ff3b3b;
+  --accent2:#ff6b6b;
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --radius: 18px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.35;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:
+    radial-gradient(900px 600px at 15% 0%, rgba(255,59,59,.18), transparent 60%),
+    radial-gradient(700px 500px at 85% 10%, rgba(255,107,107,.10), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, rgba(90,140,255,.06), transparent 60%);
+  pointer-events:none;
+}
+.wrap{ max-width: 1400px; margin: 0 auto; padding: 18px 18px 44px; }
+.topbar{
+  position: sticky; top:0; z-index:20;
+  background: rgba(11,13,16,.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(35,42,54,.8);
+}
+.topbar .top{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding: 14px 18px;
+}
+.brand{ display:flex; align-items:center; gap:10px; min-width: 200px; }
+.dot{
+  width:12px;height:12px;border-radius:99px;
+  background: linear-gradient(180deg, var(--accent2), var(--accent));
+  box-shadow: 0 0 0 6px rgba(255,59,59,.10);
+}
+.brandText{
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size: 13px;
+}
+.muted{ color: var(--muted); font-weight:600; letter-spacing: normal; text-transform:none; }
+.meta{
+  color: var(--muted2);
+  font-family: var(--mono);
+  font-size: 12px;
+  border: 1px solid rgba(35,42,54,.85);
+  background: rgba(15,18,23,.8);
+  padding: 8px 10px;
+  border-radius: 12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width: 62vw;
+}
+.sep{ opacity:.6; padding: 0 6px; }
+
+.layout{ display:grid; grid-template-columns: 360px 1fr; gap: 16px; align-items:start; }
+
+.side{
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 92px);
+  overflow:hidden;
+  border-radius: var(--radius);
+  border: 1px solid rgba(35,42,54,.95);
+  background: linear-gradient(180deg, rgba(18,23,33,.92), rgba(15,18,23,.88));
+  box-shadow: var(--shadow);
+  display:flex;
+  flex-direction:column;
+}
+.sideHead{ padding: 16px 16px 12px; border-bottom: 1px solid rgba(35,42,54,.85); }
+.sideTitle{ font-weight: 900; font-size: 16px; margin-bottom: 10px; }
+.sideTools{ display:flex; flex-direction:column; gap:10px; }
+.row{ display:flex; gap:10px; }
+
+.search{
+  width:100%;
+  padding: 10px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(11,13,16,.40);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline:none;
+}
+.search:focus{ border-color: rgba(255,59,59,.35); }
+
+.btn{
+  flex: 1 1 auto;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(11,13,16,.40);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor:pointer;
+}
+.btn:hover{ border-color: rgba(255,59,59,.35); color: #ffe0e0; }
+
+.list{ overflow:auto; padding: 10px; }
+#list::-webkit-scrollbar { width: 10px; }
+#list::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 10px; }
+#list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 80, 80, 0.65), rgba(160, 60, 60, 0.65));
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+#list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(255, 100, 100, 0.9), rgba(180, 70, 70, 0.9));
+}
+#list{ scrollbar-width: thin; scrollbar-color: rgba(180, 70, 70, 0.8) rgba(255, 255, 255, 0.05); }
+
+.item{
+  border: 1px solid rgba(35,42,54,.92);
+  background: rgba(11,13,16,.30);
+  border-radius: 14px;
+  padding: 10px 10px;
+  cursor:pointer;
+  margin-bottom: 10px;
+  transition: transform .08s ease, border-color .08s ease, background .08s ease;
+}
+.item:hover{ transform: translateY(-1px); border-color: rgba(255,59,59,.35); background: rgba(11,13,16,.45); }
+.item.active{ border-color: rgba(255,59,59,.50); background: rgba(255,59,59,.08); }
+.itemName{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.itemMeta{
+  margin-top: 6px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.badge{
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(15,18,23,.65);
+  color: var(--muted);
+  line-height:1;
+}
+.badgeHot{ color:#ffd1d1; border-color: rgba(255,59,59,.28); background: rgba(255,59,59,.08); }
+
+.main{
+  border-radius: var(--radius);
+  border: 1px solid rgba(35,42,54,.95);
+  background: linear-gradient(180deg, rgba(18,23,33,.92), rgba(15,18,23,.88));
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.mainInner{ padding: 16px; }
+
+.hero{
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(11,13,16,.35);
+  margin-bottom: 14px;
+}
+.heroTitle{ font-size: 18px; font-weight: 900; }
+.heroMeta{ margin-top: 6px; color: var(--muted2); font-family: var: var(--mono); font-size: 12px; font-family: var(--mono); }
+
+.card{
+  background: rgba(11,13,16,.22);
+  border: 1px solid rgba(35,42,54,.95);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  margin: 14px 0;
+}
+.cardHead{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 10px;
+}
+.hTitle{ font-size: 16px; font-weight: 900; letter-spacing:.2px; }
+.hint{ color: var(--muted2); font-size: 12px; }
+.pill{
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid rgba(35,42,54,.9);
+  background: rgba(11,13,16,.55);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+}
+.summary{
+  color: var(--text);
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(35,42,54,.9);
+  background: rgba(11,13,16,.35);
+}
+
+.topicCloud{ display:flex; flex-wrap:wrap; gap:10px; padding: 8px 2px 2px; }
+.topic{
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(11,13,16,.40);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--muted);
+  font-family: var(--mono);
+  line-height:1;
+  font-size: 12px;
+}
+.topicXL{ font-size: 14px; color: #ffd1d1; border-color: rgba(255,59,59,.35); background: rgba(255,59,59,.12); }
+.topicL { font-size: 13px; color: #ffe0e0; border-color: rgba(255,59,59,.28); background: rgba(255,59,59,.08); }
+.topicM { font-size: 12px; }
+.topicS { font-size: 11px; color: var(--muted2); }
+
+.segList{ display:flex; flex-direction:column; gap:10px; margin-top: 6px; }
+.seg{
+  border: 1px solid rgba(35,42,54,.92);
+  background: rgba(11,13,16,.30);
+  border-radius: 16px;
+  padding: 12px 12px;
+  cursor: pointer;
+  transition: transform .08s ease, border-color .08s ease, background .08s ease;
+}
+.seg:hover{ transform: translateY(-1px); border-color: rgba(255,59,59,.35); background: rgba(11,13,16,.45); }
+.segRow{ display:flex; gap:12px; align-items:flex-start; }
+.segIndex{
+  width: 34px; height: 34px; border-radius: 12px;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--mono); font-size: 12px;
+  color: #ffd1d1;
+  background: rgba(255,59,59,.12);
+  border: 1px solid rgba(255,59,59,.25);
+  flex: 0 0 auto;
+}
+.segMain{ flex: 1 1 auto; min-width: 0; }
+.segTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.segTitle{
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--text);
+  min-width: 0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.kbd{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid rgba(35,42,54,.95);
+  background: rgba(15,18,23,.75);
+  padding: 6px 8px;
+  border-radius: 10px;
+  white-space:nowrap;
+}
+.segDesc{ margin-top: 6px; color: var(--muted); font-size: 13px; }
+
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 10px 12px;
+  background: rgba(15,18,23,.92);
+  border: 1px solid rgba(35,42,54,.95);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  opacity: 0;
+  pointer-events:none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+.toast.show{ opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
+@media (max-width: 1100px){
+  .layout{ grid-template-columns: 1fr; }
+  .side{ position: relative; top: 0; height: auto; }
+  .meta{ max-width: 80vw; }
+}
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap top">
+      <div class="brand">
+        <div class="dot"></div>
+        <div class="brandText">AF <span class="muted">collection</span></div>
+      </div>
+      <div class="meta">14 files <span class="sep">|</span> Z:\idrive-mirror\preparation\ai-summaries\ai\</div>
+    </div>
+  </header>
+  <main class="wrap layout">
+    <aside class="side">
+      <div class="sideHead">
+        <div class="sideTitle">Episodes</div>
+        <div class="sideTools">
+          <input id="q" class="search" type="text" placeholder="Search summary, chapters, moments, topics..." />
+          <div class="row">
+            <button id="sortName" class="btn" type="button">Sort: Name</button>
+            <button id="sortCh" class="btn" type="button">Sort: Chapters</button>
+          </div>
+        </div>
+      </div>
+      <div id="list" class="list"></div>
+    </aside>
+    <section class="main">
+      <div class="mainInner">
+        <div class="hero">
+          <div class="heroTitle" id="epTitle">Select an episode</div>
+          <div class="heroMeta" id="epMeta"></div>
+        </div>
+        <section class="card" id="summaryCard" style="display:none;">
+          <div class="cardHead">
+            <div class="hTitle">Episode Summary</div>
+            <div class="pill" id="counts"></div>
+          </div>
+          <div class="summary" id="summary"></div>
+        </section>
+        <section class="card" id="topicCard" style="display:none;">
+          <div class="cardHead">
+            <div class="hTitle">Topic Map</div>
+            <div class="pill">ranked</div>
+          </div>
+          <div class="topicCloud" id="topicCloud"></div>
+        </section>
+        <section class="card" id="chaptersCard" style="display:none;">
+          <div class="cardHead">
+            <div class="hTitle">Chapters</div>
+            <div class="hint">click a chapter to copy range, shift-click to open (if url exists)</div>
+          </div>
+          <div class="segList" id="chapters"></div>
+        </section>
+        <section class="card" id="momentsCard" style="display:none;">
+          <div class="cardHead">
+            <div class="hTitle">Moments</div>
+            <div class="hint">click to copy range, shift-click to open (if url exists)</div>
+          </div>
+          <div class="segList" id="moments"></div>
+        </section>
+        <section class="card" id="superCard" style="display:none;">
+          <div class="cardHead">
+            <div class="hTitle">Superchat Highlights</div>
+            <div class="hint">click to copy range, shift-click to open (if url exists)</div>
+          </div>
+          <div class="segList" id="superChats"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script id="payload" type="application/json">
+[{"fileName":"AF 2026-01-21 1625","summary":"Nick Fuentes opens by mocking the ongoing “Clubocaust” backlash over a controversial song played at a Miami Beach nightclub, arguing the incident is being inflated into a political crisis because Jewish power networks and officials use guilt, intimidation, and double standards to enforce speech taboos. He then pivots to geopolitics, saying Trump’s Davos “framework” on Greenland proves Trump always bluffs and folds, settling for a written version of what the U.S. effectively already had instead of true sovereignty. Finally, he warns a major U.S. military buildup signals an impending regime-change war on Iran driven by Israel’s interests, predicting a long, destabilizing conflict rather than any “decisive” outcome and urging the U.S. to restrain Israel instead.","url":"https://americafirst.plus/watch/greenland-taco-deal-trump-chickens-out-on-greenland-at-davos","topicMap":["Greenland deal","Iran war","Israel influence","Trump bluffing","Davos WEF","NATO Europe","Miami Beach backlash","Patrick Bet-David","Andrew Tate","Free speech"],"chapters":[{"range":{"start":"00:00","end":"07:44"},"title":"Show open: Greenland and Iran teasers","description":"Nick previews Davos/Greenland negotiations and a looming Iran war buildup, then runs through show promos and subscriptions."},{"range":{"start":"07:44","end":"09:08"},"title":"“Clubocaust” update in Miami Beach","description":"He ridicules city officials’ response, including sending club owners to a Holocaust museum as a corrective ritual."},{"range":{"start":"09:08","end":"33:55"},"title":"PBD–Tate “struggle session” backlash","description":"Nick argues the nightclub song controversy is trivial, says Jewish political pressure made it a crisis, and blames Patrick Bet-David for humiliating Tate instead of backing him."},{"range":{"start":"33:55","end":"35:21"},"title":"Pivot to Trump: why Greenland mattered","description":"He explains why he supported acquiring Greenland as a symbol of American expansion and future-oriented national ambition."},{"range":{"start":"35:21","end":"43:36"},"title":"Greenland strategic case: sovereignty or nothing","description":"Nick lays out Arctic geopolitics and argues only U.S. sovereignty creates a clear tripwire to deter China/Russia from testing control."},{"range":{"start":"43:36","end":"48:37"},"title":"Davos framework: what the deal reportedly is","description":"He reads reporting that the U.S. won’t own Greenland, but may get sovereign base areas and veto power over Chinese/Russian investment."},{"range":{"start":"48:37","end":"55:50"},"title":"Trump “chickens out”: tactics without strategy","description":"Nick says Trump’s maximalist threats only galvanized Europe, got his bluff called, and ended with a watered-down outcome."},{"range":{"start":"55:50","end":"59:05"},"title":"Iran war brewing: force package and timing","description":"He describes the Middle East buildup and argues the administration is positioning assets for strikes after earlier hesitation."},{"range":{"start":"59:05","end":"01:02:36"},"title":"WSJ report: “decisive” options = regime change","description":"Nick interprets Trump’s “decisive” language as explicit regime-change intent and outlines the assets being deployed to enable it."},{"range":{"start":"01:02:36","end":"01:16:29"},"title":"How the Iran operation is manufactured","description":"He argues the unrest is an armed, Kurdish-linked insurrection backed by Western intelligence, then laundered through media into calls for intervention."},{"range":{"start":"01:16:29","end":"01:23:00"},"title":"Why Iran won’t be “decisive” and who benefits","description":"Nick warns airstrikes won’t topple Iran, predicts a Syria-style long war, and says Iran is fundamentally an Israel problem, not America’s."},{"range":{"start":"01:23:00","end":"02:40:52"},"title":"Super chats","description":"Nick reacts to audience questions and comments, ranging from U.S. politics and culture-war topics to personal and lifestyle tangents."}],"moments":[{"start":"12:12","end":"14:12","moment":"He reframes the nightclub song as objectively harmless and says it only became a crisis because it offended the “wrong people.”"},{"start":"14:12","end":"17:22","moment":"Nick attacks the Miami Beach political response as intimidation and argues PBD should have defended Tate publicly as a friend."},{"start":"20:24","end":"21:08","moment":"He contrasts PBD’s soft treatment of Netanyahu with a 50-minute interrogation of Tate over being present when a song played."},{"start":"35:21","end":"42:16","moment":"He delivers a detailed geopolitical argument that only U.S. sovereignty over Greenland creates a true deterrent tripwire."},{"start":"48:37","end":"52:55","moment":"Nick declares Trump “chickened out,” saying Trump’s bluff got called and the result is just codifying what the U.S. already had."},{"start":"59:05","end":"01:00:05","moment":"He says Trump asking for “decisive” options against Iran is code for regime change and predicts war is effectively inevitable."},{"start":"01:03:24","end":"01:08:05","moment":"Nick claims the Iran unrest is an armed insurrection tied to Kurdish networks and backed by CIA/Mossad, not organic protest."},{"start":"01:10:45","end":"01:12:36","moment":"He argues regime change can’t be achieved by airstrikes and protests, citing Iraq/Afghanistan as proof it requires massive ground force."},{"start":"01:18:15","end":"01:19:05","moment":"He says America First means restraining Israel—using leverage and even tariffs—to stop escalation in Gaza, Lebanon, and Iran."}],"superChatHighlights":[{"start":"01:23:40","end":"01:24:15","highlight":"He snaps at a suggestion to revive an old-style salute, rejecting “LARPing” and saying symbolism matters less than real action."},{"start":"01:24:16","end":"01:26:12","highlight":"He argues the best outcome is Vivek winning a primary but losing the general, framing it as a way to punish the GOP."},{"start":"01:29:17","end":"01:35:12","highlight":"He claims Candace Owens is exposed by a Turning Point NDA/non-disparagement clause and explains how it sets up “actual malice” litigation."},{"start":"01:38:18","end":"01:43:29","highlight":"He explodes at a question criticizing “imperialism,” insisting great powers can’t opt out and that force is sometimes necessary for security."},{"start":"02:13:03","end":"02:15:49","highlight":"He admits a provocative personal temptation about marrying an OnlyFans/porn-type woman, then dares critics to cancel him."},{"start":"02:18:30","end":"02:20:02","highlight":"He defends charging $100/month for his group chat as a filter for “quality control,” telling critics to admit they’re broke."},{"start":"02:38:12","end":"02:40:11","highlight":"He justifies considering sponsorships by citing major security costs and contrasts his revenue model with YouTube creators’ ad money."}]},{"fileName":"AF 2026-01-22 1626","summary":"Fuentes argues that the right is being suffocated by sanctimonious “wholesome” influencers and low-information engagement slop, which he says replaces serious, fact-based argument with predictable moralizing and AI-fueled hallucinations. He then uses the Don Lemon church disruption in Minneapolis to claim the radical left is a real, organized enemy and that the Trump administration’s enforcement posture is mostly performative, failing to punish agitators, deport illegals at scale, or deliver accountability. He concludes that without decisive national victory over left-wing activists and institutions, the situation will escalate and ordinary supporters will pay the price.","url":"https://americafirst.plus/watch/don-lemon-free-trump-admin-fails-to-prosecute-don-lemon","topicMap":["Don Lemon","Minneapolis ICE","Trump enforcement","Left-wing activists","Immigration fraud","Right-wing normies","Protestant influencers","AI slop","Grok prompt","TikTok deal","Pro-Israel coup","Greenland clip"],"chapters":[{"range":{"start":"00:00","end":"03:26"},"title":"Cold open and Don Lemon preview","description":"Fuentes frames a slow news day, previews the Minneapolis church disruption involving Don Lemon, and says the system won’t hold him accountable."},{"range":{"start":"03:26","end":"05:27"},"title":"TikTok deal as an institutional coup","description":"He describes the finalized TikTok ownership structure and argues it represents a pro-Israel takeover of major institutions since Oct. 7."},{"range":{"start":"05:27","end":"06:52"},"title":"Housekeeping and plugs","description":"He promotes Rumble engagement, merch, and AmericaFirst.plus subscriptions before returning to commentary."},{"range":{"start":"06:52","end":"16:06"},"title":"Club backlash and Protestant moral police","description":"He mocks Christian/protestant influencers reacting to the club stream, calling them clip-farmers and sanctimonious NPCs."},{"range":{"start":"16:06","end":"18:32"},"title":"Feeling boxed in by the “chud” right","description":"He says the mainstreaming of right-wing culture has made it restrictive, humorless, and hostile to dissent or jokes."},{"range":{"start":"18:32","end":"26:54"},"title":"AI slop, Grok “censorship reports,” and truth","description":"He debunks the viral Grok prompt as hallucinated nonsense and argues the right now prioritizes engagement over verification."},{"range":{"start":"26:54","end":"31:34"},"title":"Minneapolis crackdown numbers don’t add up","description":"He claims DHS’s visible operation yields only ~72 arrests per day, calling it a weak substitute for real mass deportations."},{"range":{"start":"31:34","end":"36:16"},"title":"Church invasion and the judge blocking Lemon charges","description":"He recounts the church disruption, notes two activists charged, and says the magistrate’s refusal to charge Lemon proves impunity."},{"range":{"start":"36:16","end":"49:11"},"title":"The left as a real enemy in blue states","description":"He describes local BLM/union/school-board activists as a militant machine and argues they target whites, Christians, and taxpayers."},{"range":{"start":"49:11","end":"01:03:12"},"title":"Trump’s failure: talk, costumes, no enforcement","description":"He says the administration postures on TV but won’t prosecute agitators or deliver accountability, urging a harder 2028 successor."},{"range":{"start":"01:03:12","end":"02:21:18"},"title":"Super chats","description":"Fuentes responds to audience questions, criticisms, and personal topics, including extended arguments and comedic asides."}],"moments":[{"start":"07:06","end":"12:15","moment":"He unloads on “wholesome” Christian influencers, saying they moralize for clout while accusing others of clout-chasing."},{"start":"18:47","end":"21:14","moment":"He calls the viral Grok “censorship score/JQ index” posts fake and says the right spreads AI hallucinations to farm engagement."},{"start":"22:31","end":"24:10","moment":"He mocks people pushing a contextless Netanyahu “Greenland” clip as proof of a conspiracy, calling it truthless slop."},{"start":"28:32","end":"31:00","moment":"He cites DHS arrest totals in Minneapolis and argues the operation’s scale is theatrical compared to the small daily results."},{"start":"36:16","end":"38:31","moment":"He insists left vs. right is real, describing blue-city activist networks as the practical enemy conservatives face."},{"start":"43:35","end":"48:10","moment":"He layers the Minneapolis story into a broader indictment of immigration, fraud, and church intimidation, rejecting any unity with Lemon."},{"start":"51:04","end":"55:13","moment":"He says Trump officials do media “costume” performances but won’t prosecute, warning the left will escalate without consequences."},{"start":"56:24","end":"01:01:46","moment":"He attacks “trust the plan” Trump boosters, contrasting Biden-era enforcement against the right with Trump’s inability to retaliate."},{"start":"01:01:57","end":"01:03:12","moment":"He calls for a younger, truly radical right candidate in 2028, saying Trump is incompetent and not hardcore enough."}],"superChatHighlights":[{"start":"01:09:37","end":"01:16:13","highlight":"He plays and ridicules Brylen Hollyhand’s club-reaction video, calling it ChatGPT-written, theater-kid moralizing, and pure clip-farming."},{"start":"01:23:31","end":"01:27:13","highlight":"He angrily debunks a super chat claim about Epstein “12-year-old triplets,” calling it uncorroborated and attacking the sender for not researching."},{"start":"01:27:13","end":"01:33:20","highlight":"He escalates into a rant about emotional “white-knighting” over Epstein discourse, insisting on rational categories and mocking moral hysteria."},{"start":"01:53:18","end":"01:55:51","highlight":"He gives a harsh response to a breakup super chat, telling the viewer to stop spiritualizing it, move on, and not dwell on humiliation."},{"start":"02:16:11","end":"02:20:10","highlight":"He berates a European “brown clown” critic, turning it into a long insult routine about empire power, nukes, and eye color."}]},{"fileName":"AF 2026-01-23 1627","summary":"Nick Fuentes argues that a new U.S. TikTok deal is the latest step in a coordinated pro-Israel effort to seize control of American information channels, especially after TikTok amplified pro-Palestine content following October 7. He contrasts what he calls evidence-based political analysis (media consolidation, censorship pressure, and war buildup) with “JQAnon” conspiracy culture, warning that fantastical theories are used to discredit real critiques and demoralize dissidents.","url":"https://americafirst.plus/watch/tiktoks-jewish-ceo-us-tiktok-deal-places-zionist-jew-as-tiktok-boss","topicMap":["TikTok sale","Oracle algorithm","Larry Ellison","Israel lobby","Media takeover","Campus crackdown","War with Iran","Trumpism critique","ICE protests","Conspiracy culture"],"chapters":[{"range":{"start":"00:00","end":"04:09"},"title":"Show preview: TikTok deal and Trump’s ICE comments","description":"Nick previews an underreported TikTok sale outcome and teases criticism of Trump calling an ICE shooting a “tragedy” and “mistake.”"},{"range":{"start":"04:10","end":"09:01"},"title":"Confidence and willpower in the ICE protest conflict","description":"He argues enforcement succeeds only if law enforcement projects resolve, and says Trump’s softening rhetoric emboldens protesters and chills agents."},{"range":{"start":"09:01","end":"11:49"},"title":"Housekeeping and merch pitch","description":"Nick promotes the Fuentes.store quarter-zip and subscriptions, then transitions back into the night’s news."},{"range":{"start":"11:49","end":"16:08"},"title":"Winter storm “government-made” claims and chemtrail chatter","description":"He mocks viral claims that the coming storm is manufactured, calling it deranged and lacking evidence."},{"range":{"start":"16:08","end":"24:21"},"title":"“JQAnon” vs. Jewish critique: drawing a hard line","description":"Nick attacks time-travel/aliens/weather-machine conspiracism while saying major figures push fantasies to avoid scrutiny of Jewish power and Israel."},{"range":{"start":"24:21","end":"36:05"},"title":"Real agendas vs. nonsense: war buildup and WEF vaccine admission","description":"He says the real story is war preparation against Iran and elite admissions about COVID shots, while conspiracists distract with snark and vibes."},{"range":{"start":"36:05","end":"38:14"},"title":"Chemtrail skepticism: where are the whistleblowers?","description":"Nick challenges chemtrail believers on logistics, costs, and the absence of credible insiders, then pivots to the featured TikTok story."},{"range":{"start":"38:14","end":"46:26"},"title":"Why TikTok was targeted after October 7","description":"He claims TikTok uniquely boosted pro-Palestine content, prompting Jewish groups to lobby Congress under a privacy pretext to force a U.S. takeover."},{"range":{"start":"46:26","end":"54:28"},"title":"Oracle’s leverage: data, ownership, and algorithm control","description":"Nick says Oracle and Larry Ellison are the indispensable winners, gaining access to and the ability to modify TikTok’s algorithm for U.S. users."},{"range":{"start":"54:28","end":"59:41"},"title":"New TikTok CEO Adam Presser and “anti-Semitism” enforcement","description":"He highlights Presser’s role in Jewish creator meetings and World Jewish Congress panels as proof the new regime will police Israel criticism."},{"range":{"start":"59:41","end":"01:21:31"},"title":"The “eighth front”: campuses, media consolidation, and Trump’s beneficiaries","description":"Nick argues Israel-aligned interests captured universities, major newsrooms, and now TikTok, while MAGA delivers little for Americans beyond rhetoric."},{"range":{"start":"01:21:31","end":"02:10:14"},"title":"Super chats and audience Q&A","description":"Nick reacts to viewer messages, riffs on culture-war topics, and continues venting about politics, media, and online discourse."}],"moments":[{"start":"07:40","end":"08:56","moment":"Nick says Trump calling the ICE shooting a “mistake” signals he may not back agents, weakening enforcement and emboldening protesters."},{"start":"15:32","end":"16:08","moment":"He coins “JQAnon,” arguing the Israel/Jewish-power topic is being hijacked into QAnon-style nonsense that discredits serious critique."},{"start":"20:10","end":"23:55","moment":"Nick attacks Tucker/Candace/Ian Carroll for promoting aliens and chemtrails while insisting people must not “look at the Jews behind the curtain.”"},{"start":"28:08","end":"30:11","moment":"He contrasts “real” issues—war prep against Iran and elite agendas—with people filming the sky and blaming winter storms on weather machines."},{"start":"32:09","end":"34:06","moment":"Nick says conspiracy influencers rely on snarky drive-by claims instead of evidence, calling it intellectually lazy and corrosive."},{"start":"44:10","end":"45:09","moment":"He claims the TikTok “privacy” rationale is a pretext because U.S. data has been hosted by Oracle since 2020, so the real motive is content control."},{"start":"50:28","end":"51:33","moment":"Nick argues Oracle’s access to TikTok’s proprietary algorithm means it can effectively control what Americans see, regardless of minority ownership."},{"start":"55:03","end":"59:14","moment":"He presents Adam Presser’s Jewish-activist meetings and World Jewish Congress appearances as proof TikTok’s new leadership will curb Israel criticism."},{"start":"01:09:20","end":"01:13:39","moment":"Nick says Trumpism’s anti-corruption promise was inverted: institutions shifted from left-wing managers to pro-Israel Jewish managers, not America First."},{"start":"01:14:03","end":"01:16:16","moment":"He lists what Israel allegedly gained—wars, money, media, and influence—versus what Americans got, calling deportation numbers and policy wins minimal."}],"superChatHighlights":[{"start":"01:25:25","end":"01:28:45","highlight":"Nick explodes at “70s porn mustache” and other NPC catchphrases, arguing they’re unfunny dialogue-tree filler people repeat without thinking."},{"start":"01:29:24","end":"01:30:00","highlight":"He spirals into a bleak rant that society is “cooked,” calling the system totalitarian and people NPCs after a big super chat prompts doomposting."},{"start":"01:30:42","end":"01:35:25","highlight":"Responding to a super chat, Nick launches a long, mean tirade about Jewish household dynamics and mocks Adam Sosnick as a pathetic old club guy."},{"start":"01:42:03","end":"01:45:52","highlight":"After a question about altered history books, Nick sarcastically fantasizes about retiring to run a simple burger stand and donut shop to escape stupidity."},{"start":"01:59:00","end":"01:59:13","highlight":"Nick agrees with a super chat contrasting Trump with Stalin, endorsing the point that Trump’s softness signals weakness in power politics."},{"start":"02:09:06","end":"02:09:18","highlight":"He closes super chats by calling the night’s messages “absolutely horrible,” venting at the low quality before ending the show."}]},{"fileName":"AF 2026-01-26 1628","summary":"Nick Fuentes argues that the Minneapolis ICE shooting of Alex Priddy was justified in context because the incident occurred amid coordinated, militant efforts to harass and physically impede federal law enforcement during immigration enforcement and a major Somali-linked welfare fraud crackdown. He frames mass immigration as the driver of America’s demographic and civilizational collapse, insists deportations necessarily require coercive state power, and condemns left-wing activists for attempting to veto elections and the rule of law through street intimidation. He also warns that Israel-criticism is being used by left-wing figures to smuggle in open-borders politics, claiming this “bundling” is a trap that redirects anti-Israel sentiment into support for policies that accelerate white displacement.","url":"https://americafirst.plus/watch/alex-pretti-killed-left-wing-nutjob-iced-by-dhs-justified","topicMap":["ICE shooting","Mass deportations","Minneapolis protests","Somali welfare fraud","Open borders","Israel narrative","Anti-Zionist left","Jewish influence","White genocide","State power","Trump failure","America First"],"chapters":[{"range":{"start":"00:00","end":"02:14"},"title":"Opening: ICE killing and the show’s thesis","description":"Fuentes previews the Minneapolis shooting, says it was justified, and outlines his main angles: the killing, the Israel narrative, and the collapse of deportations."},{"range":{"start":"02:14","end":"08:59"},"title":"Anti-Israel “bundling” and immigration as the core issue","description":"He argues Israel-criticism is being bundled with left-wing ideology to push open borders, while insisting mass migration is destroying American identity and driving white genocide."},{"range":{"start":"08:59","end":"12:47"},"title":"Trump failure prediction and show housekeeping","description":"He claims he correctly predicted Trump would fail on mass deportations, then promotes merch and subscriptions before returning to the main story."},{"range":{"start":"12:47","end":"19:02"},"title":"What happened in Minneapolis: the Priddy shooting","description":"Fuentes recounts the altercation, notes Priddy was armed, cites reporting, and says the video looks ugly but suggests a chaotic, overwhelmed-law-enforcement scenario."},{"range":{"start":"19:02","end":"24:49"},"title":"Not a protest: coordinated resistance and doxxing ICE","description":"He argues the events are organized obstruction of law enforcement, citing encrypted chats and license-plate tracking databases used to mobilize agitators."},{"range":{"start":"24:49","end":"33:12"},"title":"Why the shooting is justified: armed interference forfeits your life","description":"He says approaching federal agents during an arrest while armed is inherently threatening, and that accidents and lethal outcomes are predictable in such confrontations."},{"range":{"start":"33:12","end":"41:49"},"title":"Mandate, order, and the reality of deportations","description":"Fuentes argues elections and the Constitution authorize deportations, and that removing millions requires force; he rejects libertarian complaints as unserious."},{"range":{"start":"41:49","end":"53:32"},"title":"Somali welfare fraud scandal as the backdrop","description":"He claims Minneapolis enforcement is driven by massive Somali-linked fraud, describes alleged intimidation via racism accusations, and calls for severe punishment and denaturalization."},{"range":{"start":"53:32","end":"58:44"},"title":"Civilizational warning: demographic replacement and collapse","description":"He frames the alternative to deportations as whites becoming a minority, rising extraction politics, and eventual national decline akin to South Africa."},{"range":{"start":"58:44","end":"01:08:09"},"title":"Israelization claims rejected: open borders agenda","description":"He reads pundit reactions linking ICE to Israel and argues they are open-borders advocates using Israel as cover to make amnesty politically palatable."},{"range":{"start":"01:08:09","end":"01:21:48"},"title":"Immigration as a Jewish agenda and the need for America First","description":"He claims Jewish institutions shaped the melting-pot ideology and 1965 immigration changes, and says America First opposes both diaspora progressivism and pro-Israel war lobbying."},{"range":{"start":"01:21:48","end":"01:45:28"},"title":"Call to action: reject left-populist capture and build power","description":"He urges viewers to stop being gaslit, denounce anti-colonial leftism, and pursue local-to-national political power rather than trusting Republicans."},{"range":{"start":"01:45:28","end":"03:40:23"},"title":"Super chats","description":"Fuentes responds to audience messages, riffs on lifestyle topics, media figures, and politics, and closes out the show."}],"moments":[{"start":"01:25","end":"02:09","moment":"Fuentes declares the ICE killing was “justified 100%” and “deserved,” setting the confrontational tone for the episode."},{"start":"04:25","end":"07:32","moment":"He frames mass migration as the engine of white genocide and says restricting immigration and removing millions is necessary to save the country."},{"start":"12:47","end":"19:02","moment":"He walks through the Priddy shooting details, emphasizing the chaos, the concealed pistol, and why bodycam footage matters to sequence the event."},{"start":"22:12","end":"24:49","moment":"He insists Minneapolis is not a lawful protest but a coordinated operation to surveil, dox, and physically obstruct federal law enforcement."},{"start":"27:52","end":"29:14","moment":"Fuentes argues that running up on agents during an arrest while armed means you “forfeit your life” because officers must decide in split seconds."},{"start":"35:15","end":"38:35","moment":"He says mass deportations inherently require coercion and violence risk, and claims critics who reject that reality aren’t truly pro-deportation."},{"start":"44:40","end":"49:02","moment":"He reads NYT excerpts on Somali welfare fraud and claims the scam was protected by threats of racism lawsuits and even attempted juror bribery."},{"start":"50:51","end":"52:19","moment":"He erupts into a furious rant demanding denaturalization and extreme punishment for fraudsters, portraying the scandal as a hostile action against America."},{"start":"58:02","end":"58:39","moment":"He frames politics as zero-sum: “We win, they lose,” rejecting moral-equivalency arguments about state force against left-wing resistance."},{"start":"01:07:11","end":"01:08:09","moment":"He claims the left uses Israel’s unpopularity as a front to sell open borders, warning viewers not to be guilted into opposing ICE."}],"superChatHighlights":[{"start":"01:49:04","end":"01:50:38","highlight":"Fuentes launches a mean-spirited comedic bit about “broke” people complaining about housing, escalating into mock threats before clarifying it’s a joke."},{"start":"02:00:01","end":"02:06:19","highlight":"He delivers a long, angriest rant mocking wage-job life as miserable and dehumanizing, describing alarms, commutes, offices, and taxes as a diabolical system."},{"start":"02:48:09","end":"02:48:56","highlight":"He jokes about “gang stalking,” mock-addressing “targeted individuals” and warning them not to talk, then says he’s kidding to avoid encouraging paranoia."},{"start":"03:14:02","end":"03:16:22","highlight":"He calls Tucker Carlson a two-faced liar and “fed,” citing friendly private behavior followed by public denunciations, and says Carlson has no relationship with truth."},{"start":"03:20:01","end":"03:23:39","highlight":"He ridicules a “sad” millennial lifestyle and then trashes Chili’s/Applebee’s as microwave food, mocking viral “cheese pull” hype as national decline."},{"start":"03:25:14","end":"03:35:10","highlight":"He angrily rejects the idea that women are victims forced into degeneracy, arguing women have agency and describing hypergamy as restrained only by patriarchy and stigma."}]},{"fileName":"AF 2026-01-27 1629","summary":"Nick Fuentes argues that the Minneapolis anti-ICE protester shooting was justified and that mass deportations are an existential necessity to prevent demographic and civilizational collapse, requiring uncompromising force and political will. He says Trump’s second-term deportation program is already collapsing under midterm-year media pressure and Republican donor/political incentives, with the administration retreating, scapegoating officials, and reverting to an Obama-style “criminals-only” enforcement posture. He frames the moment as a decisive showdown between a corrupt left-wing machine (city politics, activist networks, media/celebrity amplification) and national sovereignty, warning that failure now locks in permanent amnesty and future Democratic investigations/impeachments.","url":"https://americafirst.plus/watch/trump-surrenders-terrorists-win-ice-withdraws-from-minneapolis","topicMap":["Mass deportations","Minneapolis shooting","Trump retreat","ICE tactics","Midterms 2026","Media pressure","Democrat machine","Refugee fraud","Obama policy","Stephen Miller","Kristi Noem","War with Iran","Influencer lobbying"],"chapters":[{"range":{"start":"00:00","end":"05:15"},"title":"Show setup: Minneapolis shooting and Trump backs down","description":"Fuentes previews renewed coverage of the Minneapolis anti-ICE protester killing and says Trump is already retreating on deportations while escalating toward war with Iran."},{"range":{"start":"05:15","end":"08:55"},"title":"Spending bill deadline and midterm dynamics","description":"He outlines a looming $1.7T spending fight, predicts Democrats will use DHS funding to constrain enforcement, and says midterms will revive media pressure."},{"range":{"start":"08:55","end":"12:00"},"title":"Housekeeping and personal asides","description":"He asks viewers to follow/like, jokes about his mustache and weight loss, and plugs subscriptions and merch."},{"range":{"start":"12:00","end":"22:11"},"title":"The stakes: left-wing power and demographic replacement","description":"He argues the left’s immigration agenda is an existential threat to the white majority and predicts irreversible political domination via fertility and voting blocs."},{"range":{"start":"22:11","end":"26:08"},"title":"ICE as a necessary force and the Minneapolis showdown","description":"He defends aggressive ICE tactics as essential, frames Minneapolis as organized left-wing resistance, and says enforcement must win decisively."},{"range":{"start":"26:08","end":"33:04"},"title":"Why Trump never intended real mass deportations","description":"He claims deporting millions requires a whole-of-government mobilization and sustained will that Trump, Vance, Noem, and Bondi lack."},{"range":{"start":"33:04","end":"40:24"},"title":"Deportation numbers and the Obama comparison","description":"He distinguishes interior removals vs border returns, cites estimates of 230k removals in 2025, and says the administration hides numbers because they’re low."},{"range":{"start":"40:24","end":"47:20"},"title":"Resistance is inevitable and force is required","description":"He says raids will provoke confrontation, argues deaths are unavoidable at scale, and insists critics can’t demand mass deportations without accepting coercion."},{"range":{"start":"47:20","end":"59:51"},"title":"Minneapolis corruption narrative and media amplification","description":"He claims refugee resettlement and local machine politics enable fraud and activist coordination, then media/celebrity coverage reframes enforcement as tyranny."},{"range":{"start":"59:51","end":"01:12:19"},"title":"Trump’s capitulation: Bovino pulled, de-escalation, Noem targeted","description":"He reads reports that ICE leadership is withdrawn, Trump publicly undercuts Bovino, and both parties move to punish DHS leadership, which he calls surrender."},{"range":{"start":"01:12:19","end":"01:34:36"},"title":"Demoralization, “criminals-only” pivot, and midterm panic","description":"He argues retreat signals weakness to activists and ICE alike, cites claims of new orders not to arrest non-criminal illegals, and says GOP fears losing the House."},{"range":{"start":"01:34:36","end":"01:59:52"},"title":"2018 replay, influencer shilling, and call for a more radical successor","description":"He compares the moment to “kids in cages” backlash, says Trump will lose midterms and deportations will die, attacks pro-Trump influencers, and urges a harsher 2028 leader."},{"range":{"start":"01:59:52","end":"02:49:05"},"title":"Super chats","description":"Fuentes reacts to audience messages, riffs on culture and personal topics, and continues commentary in a looser Q&A format."}],"moments":[{"start":"03:16","end":"05:06","moment":"He says Trump is simultaneously gearing up for war with Iran while already shutting down deportations under donor and media pressure."},{"start":"16:54","end":"18:16","moment":"He paints a collapse scenario of America becoming majority-minority ruins and argues only radical intervention can prevent it."},{"start":"18:04","end":"20:08","moment":"He declares there is “no substitute for victory,” defining victory as 30 million deportations and total deterrence."},{"start":"24:32","end":"26:08","moment":"He warns Minneapolis is a “neo-George Floyd” moment designed to hamstring ICE and end deportations through public outrage."},{"start":"33:44","end":"38:09","moment":"He breaks down deportation metrics and claims Trump’s 2025 interior removals trail Obama’s, proving “mass deportations” aren’t real."},{"start":"43:35","end":"45:10","moment":"He argues large-scale removals inevitably involve bloodshed and says both illegal migrants and left-wing agitators can avoid it by surrendering or staying home."},{"start":"47:04","end":"50:13","moment":"He calls the Minneapolis shootings justified and mocks narratives portraying the armed protester as a peaceful martyr."},{"start":"01:07:47","end":"01:10:56","moment":"He says pulling Border Patrol’s Bovino is a “scalp” that emboldens activists by proving Trump will retreat under pressure."},{"start":"01:12:44","end":"01:15:05","moment":"He argues Trump’s public undercutting demoralizes ICE, making agents hesitate in lethal situations because leadership won’t back them."},{"start":"01:34:28","end":"01:34:36","moment":"He declares “mass deportations are over,” saying the midterm cycle will permanently shut down enforcement just like 2018."}],"superChatHighlights":[{"start":"02:02:38","end":"02:03:13","highlight":"He rejects a super chat praising Eric Prince, calling him a spook tied to Israel and saying supporters have been psyopped by PR tours."},{"start":"02:04:14","end":"02:06:12","highlight":"He riffs on a nofap/Catholic discipline super chat, launching into a long “lock in” self-improvement monologue and anti-gooning talk."},{"start":"02:08:14","end":"02:10:24","highlight":"Asked about Taco Bell, he pivots into a rant about fast-food cleanliness and says he only trusts places with “standards,” then names favorites."},{"start":"02:11:40","end":"02:19:16","highlight":"He responds to a super chat about women with an extended rant on dating, marriage, and wanting children while insisting he prefers total autonomy."},{"start":"02:36:00","end":"02:43:12","highlight":"He escalates a super chat about Candace Owens into a long attack on her intelligence and reading ability, citing mispronunciations as proof."}]},{"fileName":"AF 2026-01-28 1630","summary":"Nick Fuentes argues that Democrats and the media are running a coordinated campaign to stop deportations by turning enforcement incidents into emotional propaganda, using the Alex Preti shooting as a key example. He says the reality is a binary choice—mass deportations or mass amnesty—and that any serious deportation effort necessarily involves coercion, confrontation, and sometimes lethal outcomes, especially amid organized left-wing resistance. He also mocks conspiracy-minded weather narratives and uses Candace Owens’ ice-melting comments as proof that influential commentators and their audiences are often shockingly ignorant.","url":"https://americafirst.plus/watch/abolish-ice-government-shutdown-to-defund-dhs-stop-ice","topicMap":["ICE enforcement","Alex Preti","Mass deportations","Schumer demands","Government shutdown","Democratic Party","Left-wing protests","Media psyops","BLM analogy","Candace Owens","Weather conspiracies","Doxxing"],"chapters":[{"range":{"start":"00:00","end":"01:45"},"title":"Show setup: shutdown and Minneapolis","description":"Nick previews the DHS funding fight, Schumer’s ICE demands, and new footage tied to the Minneapolis confrontation."},{"range":{"start":"01:45","end":"05:45"},"title":"Resurfaced Alex Preti footage","description":"He describes video showing Preti spitting on ICE, kicking their vehicle, breaking a taillight, and carrying a visible gun."},{"range":{"start":"05:45","end":"20:53"},"title":"Winter storm conspiracies and Candace Owens","description":"Nick ridicules chemtrail/snow “lab” claims and mocks Owens for implying ice not melting at 30°F is suspicious."},{"range":{"start":"20:53","end":"29:02"},"title":"Deportations vs the narrative of a “Holocaust”","description":"He says deportations are modest in reality, but the left treats even limited enforcement as intolerable."},{"range":{"start":"29:02","end":"33:18"},"title":"Why Democrats insist on mass migration","description":"Nick claims immigration is central to Democrats ideologically and electorally, including power, fraud, and graft incentives."},{"range":{"start":"33:18","end":"38:40"},"title":"The fork: mass deportation or mass amnesty","description":"He argues there is no third option and that removing tens of millions inevitably requires force and produces casualties."},{"range":{"start":"38:40","end":"45:23"},"title":"Left-wing street tactics to halt ICE","description":"He says radicals create chaos to pressure businesses and normies into demanding de-escalation and stopping enforcement."},{"range":{"start":"45:23","end":"52:16"},"title":"Preti as media psyop and conservative weakness","description":"Nick says the “veteran nurse” framing fooled right-wingers and that new facts show Preti was a repeat aggressor."},{"range":{"start":"52:16","end":"01:04:00"},"title":"Preti as “terrorist” and ICE restraint","description":"He argues Preti’s behavior was criminal and violent, and says ICE initially showed restraint by not arresting or shooting him."},{"range":{"start":"01:04:00","end":"01:07:42"},"title":"BLM analogy and accountability","description":"Nick compares the episode to George Floyd-era narratives, arguing consequences are necessary to maintain order."},{"range":{"start":"01:07:42","end":"01:31:53"},"title":"Schumer’s shutdown leverage to handcuff ICE","description":"He says Democrats are using the funding deadline to force masks off, body cams, warrants, and investigations to end deportations."},{"range":{"start":"01:31:53","end":"02:11:30"},"title":"Super chats","description":"Nick reacts to audience messages, jokes, and questions, including culture-war topics and personal asides."}],"moments":[{"start":"02:33","end":"04:12","moment":"Nick says the resurfaced video proves Preti repeatedly confronted ICE while armed and was “rolling the dice” until he died."},{"start":"09:14","end":"16:10","moment":"He mocks Candace Owens for acting shocked that ice won’t melt at 30°F, calling it basic ignorance about water freezing."},{"start":"21:05","end":"25:22","moment":"Nick argues the country is in an organized war to stop deportations even though Trump’s actual deportation numbers are limited."},{"start":"32:36","end":"36:17","moment":"He insists there are only two outcomes—mass deportation or mass amnesty—and says serious deportation requires coercive force."},{"start":"44:31","end":"45:23","moment":"Nick says law-abiding people must “match their energy” and confront left-wing chaos directly instead of backing down."},{"start":"47:01","end":"52:16","moment":"After reading the NYT description of the video, he declares Preti no hero and says the shooting was fully justified."},{"start":"55:06","end":"59:21","moment":"He labels Preti a coordinated activist “outlaw,” arguing spitting on agents and breaking a taillight is assault, not protest."},{"start":"01:08:34","end":"01:14:44","moment":"Nick says Schumer’s mask ban, warrants, and investigations are designed to dox and paralyze ICE, effectively ending deportations."},{"start":"01:22:16","end":"01:23:36","moment":"He scolds libertarian critics like Dave Smith, arguing you can’t support deportations while condemning force against armed attackers."}],"superChatHighlights":[{"start":"01:42:16","end":"01:43:02","highlight":"Nick riffs on the “magic conch” bit, then snaps back after a crude aside, noting viewers say their kids are watching."},{"start":"01:50:20","end":"01:51:03","highlight":"He condemns a graphic pro-Epstein super chat as disgusting and warns the sender they’re “on notice.”"},{"start":"02:05:04","end":"02:06:10","highlight":"Nick explodes at a super chat telling him to “marry a man,” calling it classic female shaming and saying it fuels misogyny."},{"start":"02:00:00","end":"02:01:40","highlight":"He rejects moon-landing skepticism as an anti-white narrative and delivers a rant insisting white people went to the moon."},{"start":"01:52:46","end":"01:54:22","highlight":"Nick trashes Harry Potter as a “gay” franchise, says he respects LOTR more, and calls Game of Thrones the superior series."}]},{"fileName":"AF 2026-01-29 1631","summary":"Nick Fuentes argues the Trump administration is simultaneously winding down aggressive ICE operations (especially after backlash in Minneapolis) while accelerating toward a larger, more escalatory second strike on Iran, including possible special forces raids. He frames this as ending the “war on illegal immigration” while starting a war for Israel, insisting Trump’s presidency was enabled and funded primarily to deliver confrontation with Iran. He also warns against being ideologically captured by left-wing “pro-Palestine” platforms and narratives, insisting the right must oppose both mass immigration and the Jewish oligarchy driving U.S. policy.","url":"https://americafirst.plus/watch/iran-war-imminent-trump-plans-ground-raids-in-iran","topicMap":["Iran war","Israel influence","Trump agenda","Mass deportations","ICE Minneapolis","Diplomacy sabotage","Oct 7 politics","TikTok sale","Upscroll app","Left-wing capture","Open borders","Jewish oligarchy"],"chapters":[{"range":{"start":"00:00","end":"02:30"},"title":"Two mirrored crises","description":"Nick opens by contrasting an imminent war with Iran with a simultaneous drawdown of ICE activity in Minneapolis."},{"range":{"start":"02:31","end":"05:03"},"title":"Second strike: bigger than last year","description":"He claims the coming Iran operation will exceed last year’s bombing and may include special forces raids on nuclear sites."},{"range":{"start":"05:03","end":"12:24"},"title":"Minneapolis: ICE retreat and \"targeted\" enforcement","description":"He says Tom Homan’s press conference confirms a surrender: fewer ICE agents and a shift away from sweeping raids."},{"range":{"start":"12:26","end":"16:09"},"title":"TikTok sale and the \"Upscroll\" trap","description":"He discusses TikTok’s acquisition and mocks a pro-Palestine TikTok alternative for quickly adopting hate-speech policing."},{"range":{"start":"16:09","end":"37:28"},"title":"Rejecting left-wing capture on Israel","description":"Nick argues the left’s anti-Israel stance is ideological, not aligned with right-wing identity politics, and insists America First rejects both camps."},{"range":{"start":"37:29","end":"45:22"},"title":"Why Trump was \"allowed\" to win","description":"He claims post–Oct. 7 Jewish political influence shifted right and enabled Trump as a vehicle for Israel’s revenge agenda."},{"range":{"start":"45:22","end":"53:44"},"title":"Poisoned diplomacy and the Iran setup","description":"He argues Trump’s first-term actions made a deal with Iran impossible and locked the U.S. into escalation after last year’s strike."},{"range":{"start":"53:44","end":"59:59"},"title":"Three-party equation: U.S., Israel, Iran","description":"Nick says Americans misread the June strike as \"one and done\" while Israel treated it as phase one toward toppling Iran."},{"range":{"start":"01:00:00","end":"01:12:56"},"title":"Iran rearmament and the no-offramp logic","description":"He explains why Iran would rebuild nukes, missiles, and proxies, and why U.S. strategy leaves only negotiation or bombing."},{"range":{"start":"01:12:57","end":"01:22:43"},"title":"NYT options list and maximalist demands","description":"He reads reported U.S. demands and force posture, arguing Iran will never accept disarmament and Israel will sabotage diplomacy."},{"range":{"start":"01:22:43","end":"01:29:56"},"title":"Wrap-up: deportations over, war incoming","description":"Nick concludes mass deportations are already dead while war with Iran is inevitable, mocking \"trust the plan\" influencers."},{"range":{"start":"01:29:56","end":"02:28:22"},"title":"Super chats","description":"Nick reacts to audience questions and comments, ranging from religion and culture to politics and personal topics."}],"moments":[{"start":"07:17","end":"09:45","moment":"He erupts over Tom Homan’s Minneapolis presser, calling the ICE “drawdown” a humiliating retreat and surrender."},{"start":"21:58","end":"26:29","moment":"He attacks Hasan Piker’s “Zionist pig” framing and dares the left to escalate, insisting open borders serve Jewish interests."},{"start":"29:12","end":"35:00","moment":"Nick calls for “reconquering America” via sweeping deportations and rejects guilt-tripping from pro-Palestine activists."},{"start":"39:15","end":"45:22","moment":"He claims Trump was elected primarily to deliver war with Iran, with other policies treated as secondary “stocking stuffers.”"},{"start":"47:05","end":"49:14","moment":"He argues last year’s strike wasn’t about nukes but about clearing the runway for Israel’s long-term goal of destroying Iran."},{"start":"59:05","end":"01:06:22","moment":"He says U.S. deception during negotiations permanently foreclosed diplomacy, leaving only escalation as Iran rebuilds deterrence."},{"start":"01:13:00","end":"01:20:33","moment":"Reading the NYT report, he says maximalist U.S. demands make war inevitable and Israel can always sabotage any talks."},{"start":"01:23:30","end":"01:29:28","moment":"He declares vindication: deportations “never happened,” war is coming, and pro-Trump “plan trusters” were played."}],"superChatHighlights":[{"start":"01:45:28","end":"01:47:03","highlight":"He ridicules a lawyer asking how to “hide” his beliefs, insisting the answer is simply not to talk about them."},{"start":"01:53:19","end":"02:00:37","highlight":"He launches into a long, harsh rant about men not enjoying women’s company, calling dating “excursions” a psyop and mocking courtship."},{"start":"02:02:13","end":"02:04:39","highlight":"He jokes about being a homeowner while reacting to Trump wanting housing prices to rise, then pivots to say housing should be free."},{"start":"02:18:04","end":"02:23:06","highlight":"He goes on an extended pop-culture tirade trashing Lord of the Rings as weak and sentimental, praising stories centered on power and brutality."},{"start":"02:27:16","end":"02:27:35","highlight":"He closes the segment calling the super chats “psychologically painful,” saying he’d rather be in Guantanamo than read them."}]},{"fileName":"AF 2026-01-30 1632","summary":"Nick Fuentes argues that the Epstein file dump proves a sweeping government cover-up and demands a full, nonpartisan investigation into everyone implicated, including major political and corporate figures, because the real scandal is political blackmail and compromised sovereignty. He also condemns the far left as irreconcilably hostile to Christianity and national sovereignty, warning that any right-left “anti-Israel” coalition is a trap that ends in hate-speech laws and regime power against the right. He frames the episode’s worldview around nationalism, tribal loyalty, and the need for a stronger executive authority to overcome billionaire and foreign-state leverage.","url":"https://americafirst.plus/watch/epstein-file-dump-wild-new-allegations-in-leaked-epstein-files","topicMap":["Epstein files","Government cover-up","Political blackmail","Trump leverage","Israel lobby","Far left threat","Anti-left coalition","Immigration","Nationalism","Strong executive","Don Lemon arrest","Church disruption"],"chapters":[{"range":{"start":"00:00","end":"06:51"},"title":"Epstein dump and the six-million-file question","description":"Nick opens on the Epstein release, argues the public is owed transparency, and says the government must follow up on disturbing leads after previously denying the files existed."},{"range":{"start":"06:51","end":"11:20"},"title":"Don Lemon arrest after church disruption","description":"He praises charges tied to a church protest as a civil-rights violation, criticizes no-bail release, and frames the legal process itself as deserved punishment."},{"range":{"start":"11:20","end":"16:21"},"title":"Why the left is still the enemy","description":"Nick says recent anti-Israel sentiment is being used to pull “normies” into leftism and insists the modern left is fundamentally hostile to his side."},{"range":{"start":"16:21","end":"30:15"},"title":"Tribal politics and the diaspora vs. Israel strategy","description":"He lays out a theory that Jewish identity drives both diaspora liberalism and Israel power politics, and argues American policy is distorted by competing loyalties."},{"range":{"start":"30:15","end":"43:28"},"title":"Nationalism vs. Marxist class politics","description":"Nick rejects class-only analysis, attacks the idea that figures like Ilhan Omar represent white workers, and argues immigration and enclaves directly dispossess natives."},{"range":{"start":"43:28","end":"49:28"},"title":"No coalition with the far left","description":"He warns that socialist power would bring hate-speech laws and cultural demolition, and says the right must be confident, militant, and refuse left moral hegemony."},{"range":{"start":"49:28","end":"01:03:08"},"title":"Escalation: Hassan Piker as the face of the threat","description":"Nick intensifies his anti-left rhetoric, argues tolerance is over, and says the far right must politically defeat and discredit leftist figures and their ideology."},{"range":{"start":"01:03:08","end":"01:09:59"},"title":"The left’s collapsing moral language","description":"He claims even leftists now use far-right-style insults, treating it as proof the cultural center has shifted and the left is losing confidence."},{"range":{"start":"01:09:59","end":"01:15:49"},"title":"What’s in the released Epstein files","description":"Nick summarizes the tranche—emails, tips, images—and says some items look credible while many accusations are uncorroborated and lack context."},{"range":{"start":"01:15:49","end":"01:24:03"},"title":"Timeline of the alleged cover-up","description":"He recounts the influencer binder “fake-out,” delays, denials, and shifting DOJ claims, arguing the pattern shows deliberate obstruction and deception."},{"range":{"start":"01:24:03","end":"01:36:44"},"title":"Blackmail, sovereignty, and the need for a strong executive","description":"Nick says the core issue is sex crimes used for extortion to control elites, predicts no real investigation due to power networks, and calls for stronger executive authority."},{"range":{"start":"01:36:44","end":"03:02:12"},"title":"Super chats","description":"Nick reacts to audience messages, riffs on relationships, culture, and politics, and closes out the show."}],"moments":[{"start":"04:34","end":"06:32","moment":"He says DOJ/FBI lied about Epstein files existing and insists Congress and law enforcement must investigate all implicated parties, not just Democrats."},{"start":"07:06","end":"09:12","moment":"He frames the church disruption as a federal civil-rights offense and celebrates Don Lemon being charged, arguing process-as-punishment matters."},{"start":"12:29","end":"15:20","moment":"Nick claims the modern left is a Jewish-created project and warns anti-Israel leftists criticize Israel for anti-tradition, anti-identity reasons."},{"start":"18:00","end":"30:14","moment":"He delivers a long identitarian explanation of Jewish diaspora politics and Israel power strategy, concluding America must be governed by its founding stock."},{"start":"36:22","end":"41:03","moment":"He rejects class-first Marxism by arguing immigration and enclaves destroy his home and that leftists apply class analysis only to whites."},{"start":"46:21","end":"49:06","moment":"He predicts any far-left victory ends in hate-speech laws, re-education, and dismantling white civilizational symbols, so coalition is impossible."},{"start":"01:00:02","end":"01:02:47","moment":"He erupts at Hassan Piker, demanding a ruthless far-right posture and total intolerance toward the far left’s moral claims and political ambitions."},{"start":"01:19:34","end":"01:24:03","moment":"He strings together the binder stunt, delays, denials, and congressional maneuvers as proof of a coordinated cover-up that ultimately failed."},{"start":"01:28:00","end":"01:32:27","moment":"He says the real Epstein scandal is blackmail and compromised sovereignty, then argues democracy is vulnerable and America needs a stronger executive."},{"start":"01:34:23","end":"01:36:15","moment":"He claims the Epstein file drama is being used as leverage over Trump alongside looming Iran war pressure, calling the timing too convenient to ignore."}],"superChatHighlights":[{"start":"01:37:24","end":"01:42:58","highlight":"He riffs on a viewer’s wife calling him a “racist little woman hater,” then launches into a long bit about being the hated friend who “empowers men.”"},{"start":"01:46:12","end":"01:46:50","highlight":"He mock-answers an over-the-top “tunnel Jews” message by leaning into the absurdity and treating it like a conspiracy world-building gag."},{"start":"01:57:10","end":"01:59:39","highlight":"He goes on a furious rant about “corporate slop bowls,” backpack office culture, and modern city aesthetics, praising Chicago as a real working-class city."},{"start":"02:03:06","end":"02:10:23","highlight":"He explodes into an extended blackpill monologue about dating dynamics, humiliation, and “Chad vs. jester” behavior, framed as hard realism."},{"start":"02:16:17","end":"02:23:28","highlight":"He defends Andrew Tate and Kanye for past sacrifices despite later retreats, arguing critics with no skin in the game treat real risk like entertainment."},{"start":"02:46:10","end":"02:46:28","highlight":"He snaps at a merch complaint, telling the viewer to stop whining and escalating into a harsh, profane dismissal over customer expectations."}]},{"fileName":"AF 2026-02-02 1633","summary":"Fuentes argues the newly released Epstein files contain no definitive “smoking gun,” and that the public is being misled by engagement-farming exaggerations, AI fakes, and sloppy inferences that turn Epstein into an occult cartoon rather than a real-world intelligence-style operation. He insists the grounded story is that Epstein was a Jewish-connected, Israel-aligned fixer elevated by Jewish financiers, using trafficking of teenage girls as leverage and access to elites, and that the proper conclusion is to reopen and pursue the investigation with rigor. He frames the broader conflict as fundamentally theological and political—Christianity versus Judaism—criticizing figures like Candace Owens for “Khazar” narratives that, in his view, divert attention away from Jewish power and responsibility.","url":"https://americafirst.plus/watch/epstein-hoax-debunking-the-fake-epstein-hoax","topicMap":["Epstein files","Jewish power","Israel influence","Hoax debunking","Occult conspiracies","Catholic doctrine","Liberal individualism","Candace Owens","DOJ FBI investigation","Grooming method","Victoria's Secret","Blackmail leverage"],"chapters":[{"range":{"start":"00:01","end":"05:18"},"title":"Two Epsteins: real vs. schizo narrative","description":"He contrasts a factual, Israel-linked Epstein profile with an occult “lizard/time travel” caricature meant to distract from the real power story."},{"range":{"start":"05:18","end":"13:18"},"title":"Truth as the movement’s limiting principle","description":"He says the show’s “superpower” is truth and warns that reckless exaggeration and lying will sabotage momentum against Jewish power."},{"range":{"start":"13:18","end":"22:24"},"title":"Catholic anti-liberal framing: persons, families, and the Jewish question","description":"He rejects liberal individualism and “good Jews” exceptions, insisting the core conflict is Church vs. Synagogue and Jews vs. Christians."},{"range":{"start":"22:24","end":"30:04"},"title":"Housekeeping, merch controversy, and “goyim” riff","description":"He promotes the store/subscriptions and riffs on “goyim,” defending edgy humor and refusing demands to apologize over a quarter-zip."},{"range":{"start":"30:04","end":"38:13"},"title":"Epstein files dump: what people expected vs. what arrived","description":"He reviews the mainstream Epstein timeline and says the 3M-file release lacks direct proof of blackmail or handlers."},{"range":{"start":"38:13","end":"49:24"},"title":"No smoking gun, so don’t overclaim—reopen the investigation","description":"He argues the files are incomplete/ambiguous, likely tampered with, and should be treated as leads for DOJ/FBI follow-up."},{"range":{"start":"49:24","end":"01:10:43"},"title":"Debunking viral hoaxes from the files","description":"He walks through examples like the “Baal” scan error, AI-edited images, porn misidentified as torture, and misleading photos."},{"range":{"start":"01:10:43","end":"01:23:24"},"title":"What Epstein actually did: grooming teens, not occult murder fantasies","description":"He reads a victim statement to define the pattern as grooming/erotic massages with 14–17-year-olds, stressing it’s still evil."},{"range":{"start":"01:23:24","end":"01:43:05"},"title":"Operational model: Victoria’s Secret pipeline, brothel leverage, elite access","description":"He describes a plausible intelligence-brothel mechanism tied to Jewish financiers and Israel, and says the files show Jewish supremacist talk."},{"range":{"start":"01:43:05","end":"02:08:53"},"title":"Candace Owens clip and the “Khazar” diversion","description":"He attacks the Khazar/gypsy framing as evasive, anti-Christian indifferentism that ultimately exonerates Jews and obscures the real conflict."},{"range":{"start":"02:08:53","end":"03:20:03"},"title":"Super chats","description":"He reacts to audience messages, riffs on critics, and continues arguing for rigor over sensationalism while discussing merch and personalities."}],"moments":[{"start":"01:08","end":"05:11","moment":""},{"start":"08:10","end":"12:19","moment":"He warns Jewish power is “on the ropes” but says the moment will be wasted if people overplay with lizard/time-travel nonsense."},{"start":"17:52","end":"20:35","moment":"He rejects “good Jews” individualism and insists the conflict is Jews vs. Christians, naming AIPAC/ADL/WJC and Jewish billionaires."},{"start":"38:13","end":"41:13","moment":"He says the Epstein files contain no smoking gun—no explicit blackmail/handler proof—and explains why that limits conclusions."},{"start":"55:01","end":"01:01:36","moment":"He debunks the viral “Epstein wired money to Baal” claim as a scan/transcription error that actually reads “bank name.”"},{"start":"01:02:13","end":"01:07:52","moment":"He calls out AI-edited and misattributed images/videos used as “proof,” including a BDSM porn clip mistaken for Epstein torture."},{"start":"01:17:33","end":"01:21:35","moment":"He clarifies he’s not defending Epstein, then defines the crime as grooming vulnerable teens (14–17), explaining why it’s abusive."},{"start":"01:29:37","end":"01:33:03","moment":"He argues the island functioned like an intelligence-run brothel: control the girls, gain leverage over politicians and financiers."},{"start":"01:44:50","end":"01:50:03","moment":"He plays Candice Owens and mocks the “Khazar/pagan gypsies” framing as an evasive diversion from Jews and Judaism."},{"start":"02:04:35","end":"02:08:11","moment":"He concludes the occult overload is designed to distract and fatigue people until they say “it was never about the Jews.”"}],"superChatHighlights":[{"start":"02:12:20","end":"02:13:34","highlight":"He compares “Epstein Island maximalism” to Holocaust atrocity embellishments, demanding consistency: either you troll or you moralize."},{"start":"02:52:29","end":"02:53:05","highlight":"He mocks a superchat calling for a military strongman and public guillotines, dismissing it as childish fantasy and posturing."},{"start":"02:33:33","end":"02:34:42","highlight":"He erupts over demands to apologize for selling the quarter-zip, telling critics to “blow it out your ass” and learn English."},{"start":"02:43:01","end":"02:47:16","highlight":"He recounts John Doyle’s fallout, saying Doyle fixated on an old group-chat insult and later became a “Jew glazer.”"},{"start":"03:10:33","end":"03:11:09","highlight":"He ridicules an incoherent superchat demanding “torture and pizza documents,” calling the writer low-IQ and rejecting vague evidence."},{"start":"03:18:54","end":"03:19:05","highlight":"He gives a flat, dismissive response to a provocative superchat from a “trans girl,” refusing to engage beyond a curt acknowledgment."}]},{"fileName":"AF 2026-02-03 1634","summary":"Nick Fuentes argues the movement is being weakened by infighting and scandal-chasing, and says supporters should “close ranks,” prioritize the larger struggle, and build a disciplined big-tent coalition rather than moralizing and dividing. He then lays out his view that the Iran crisis is a long-running U.S.-Israel regime-change project driven by sabotage, sanctions, and proxy forces, and warns the U.S. lacks the readiness and strategic interest for a protracted war. He frames Friday’s Oman talks as a last-chance, indirect nuclear negotiation that Israel may try to derail, while regional powers push de-escalation to avoid regional collapse.","url":"https://americafirst.plus/watch/iran-war-averted-us-iran-negotiations-schedule-for-friday","topicMap":["Iran war","Regime change","Israel influence","Negotiations Oman","Movement unity","Infighting drama","Big tent","Sanctions sabotage","Missiles proxies","America First policy","Government shutdown","DHS funding"],"chapters":[{"range":{"start":"00:00","end":"06:38"},"title":"Show preview: Iran brinkmanship and DHS shutdown","description":"Nick previews Friday’s Iran negotiations, rising Gulf incidents, and a looming partial DHS shutdown that he says won’t stop ICE/Border Patrol."},{"range":{"start":"06:38","end":"10:23"},"title":"Drama day and the “real enemy”","description":"He addresses online feuds and insists internal fights distract from an existential conflict against hostile forces targeting Americans and their civilization."},{"range":{"start":"10:23","end":"15:29"},"title":"Closing ranks and “enemy” cohesion","description":"He argues opponents close ranks despite scandals, while his side self-destructs via public moralizing and circular firing squads."},{"range":{"start":"15:29","end":"20:33"},"title":"Gossip as a weapon and “survivorship bias”","description":"Nick says scandal cycles are used to remove dissidents, while protected establishment figures appear “clean” because they’re shielded."},{"range":{"start":"20:33","end":"27:11"},"title":"Movement refinement, discipline, and credibility","description":"He calls for restraint, factual rigor, and maturing from spectacle into durable political, economic, and intellectual foundations."},{"range":{"start":"27:11","end":"35:18"},"title":"Big-tent coalition and “Goyim United”","description":"He argues for an “irrational camaraderie” big tent, squashing feuds and uniting varied personalities against shared priorities."},{"range":{"start":"35:18","end":"43:37"},"title":"No more “goy wars” and refocusing on policy","description":"Nick doubles down on unity messaging, says drama is being exploited to divide, and pivots to the Iran story as the real stakes."},{"range":{"start":"43:37","end":"54:23"},"title":"Iran: manufactured crisis and regime-change playbook","description":"He claims sabotage, sanctions, and armed infiltrations are part of a systematic regime-change strategy akin to Syria’s trajectory."},{"range":{"start":"54:23","end":"01:02:39"},"title":"Why Trump paused strikes and surged forces","description":"Nick says the U.S. lacked a decisive force package, fears retaliation it can’t defend against, then moved a carrier group and defenses."},{"range":{"start":"01:02:39","end":"01:13:23"},"title":"Oman talks: maximal demands vs nuclear-only reality","description":"He explains Iran’s red lines on missiles/proxies and says the U.S. is now narrowing to nuclear talks, repeating last year’s pattern."},{"range":{"start":"01:13:23","end":"01:31:55"},"title":"Israel as spoiler and America First alternative","description":"He argues Israel will sabotage diplomacy to force war, and says America First means restraining revisionist actors and stabilizing the region to leave."},{"range":{"start":"01:31:55","end":"02:41:47"},"title":"Super chats","description":"Nick answers audience questions, riffs on movement discipline, Epstein-file narratives, coalition politics, and assorted cultural and personal topics."}],"moments":[{"start":"07:31","end":"10:23","moment":"He says internal feuds are trivial compared to an existential struggle, urging viewers to remember “who the real enemy is.”"},{"start":"11:09","end":"13:47","moment":"He uses Dave Rubin’s surrogacy as an example of opponents “closing ranks,” arguing his side should stop public self-sabotage."},{"start":"18:13","end":"20:33","moment":"He claims “squeaky clean” establishment figures are protected, calling it survivorship bias and evidence of selective enforcement."},{"start":"19:41","end":"20:33","moment":"He says he squashed the Jake Shields feud in a six-minute phone call as a model for unity and refocusing."},{"start":"22:05","end":"23:18","moment":"He declares the movement must mature from spectacle into durable political and economic power, emphasizing discipline and facts."},{"start":"33:12","end":"35:18","moment":"He argues for a big-tent coalition like Turning Point’s, warning that endless purity tests shrink the movement into “small tents.”"},{"start":"44:23","end":"53:16","moment":"He frames Iran unrest as foreign-backed regime change, citing sabotage, sanctions, and armed operatives as a coordinated invasion."},{"start":"56:55","end":"59:15","moment":"He says the real policy shift is from “no new wars” to regime change, arguing Trump’s own rationale reveals the escalation."},{"start":"01:16:45","end":"01:18:05","moment":"He predicts Israel will spoil any deal via provocation or disinformation because it wants missiles, proxies, and enrichment all eliminated."},{"start":"01:21:37","end":"01:26:15","moment":"He outlines an America First Middle East strategy: restrain Israel/Emirates, stabilize states, withdraw troops, and pivot to the Pacific/Caribbean."}],"superChatHighlights":[{"start":"01:33:47","end":"01:39:13","highlight":"He tells a young viewer asking how to get involved in politics that if you have to ask, you’re not ready, and demands initiative and tangible value."},{"start":"01:43:23","end":"01:50:51","highlight":"He previews his Epstein-focused “evidence trail” linking major names and institutions, arguing provable networks matter more than sensational claims."},{"start":"02:01:21","end":"02:09:04","highlight":"He riffs on Candace Owens’ mispronunciations and says playing the race card over criticism is classless, while still urging her to “come back.”"},{"start":"02:17:11","end":"02:22:06","highlight":"He praises “old timers” and blue-collar character, then attacks millennials/zoomers for lacking gravitas and says modern entertainment has collapsed."},{"start":"02:28:19","end":"02:30:49","highlight":"He answers an occult-themed question by explaining the “black cube” as a symbol of the material plane and links it to broader esoteric symbolism."},{"start":"02:35:47","end":"02:36:07","highlight":"He angrily dismisses a claim about Bannon “rehabilitating” Epstein, insisting it was media training and calling the audience “idiots” for misreading it."}]},{"fileName":"AF 2026-02-05 1635","summary":"Nick Fuentes argues that the Trump administration has fully capitulated on mass deportations, using Minneapolis as the turning point where media pressure, left-wing resistance, midterm politics, and business donors forced a retreat to “criminals only” enforcement. He frames this as the predictable outcome of a Republican Party that profits from immigration and only performs toughness for optics, while blaming Trump/Vance boosters for coping and gaslighting. He also attacks JD Vance as a Silicon Valley/deep-state creation being positioned for 2028, insisting the real political fight ahead is stopping Vance and refusing to bail out the GOP after repeated betrayals on immigration, Israel, and governance.","url":"https://americafirst.plus/watch/retreat-from-minneapolis-trump-initiates-full-withdrawal-from-minneapolis","topicMap":["Mass deportations","ICE Minneapolis","Trump capitulation","Midterms 2026","Republican donors","Cheap labor","JD Vance 2028","Silicon Valley","Stephen Miller","Border wall","Left-wing protests","Iran war"],"chapters":[{"range":{"start":"00:00","end":"04:46"},"title":"Trump caves on deportations","description":"Nick opens by saying Trump’s NBC interview confirms deportations are now “criminals only,” with ICE drawdowns and body cams signaling total surrender."},{"range":{"start":"04:46","end":"08:41"},"title":"Iran talks as war ultimatum","description":"He previews imminent U.S.–Iran negotiations in Oman, describing an impasse over enrichment, missiles, and proxies that he says points toward war."},{"range":{"start":"08:41","end":"11:38"},"title":"Show plugs and movement support","description":"Nick promotes merch and America First Plus, framing paid membership as the practical way to support the movement and access extra content."},{"range":{"start":"11:38","end":"24:53"},"title":"JD Vance condemnation and “Never Vance”","description":"He responds to Vance condemning him, declares “Never Vance,” and argues Vance owns the administration’s failures and won’t get young white men’s votes."},{"range":{"start":"24:53","end":"31:46"},"title":"Elijah/Sarah drama and “no e-girls”","description":"Nick jokes about being vindicated on e-girl warnings while urging charity, privacy, and confession to God rather than internet moral tribunals."},{"range":{"start":"31:46","end":"39:10"},"title":"Featured story begins: Minneapolis fallout","description":"He lays out how Minneapolis enforcement escalated into shootings and political backlash, which he says made Trump’s retreat inevitable."},{"range":{"start":"39:10","end":"45:20"},"title":"Timeline: broken promises since day one","description":"Nick recounts the “day one raids” that never happened, low arrest numbers, and how excuses shifted from security to resources to rebranding."},{"range":{"start":"45:20","end":"54:19"},"title":"Optics over substance activates the left","description":"He argues ICE staged provocative, low-yield raids for hype while failing materially, energizing left-wing organizing and escalating conflict."},{"range":{"start":"54:19","end":"01:06:18"},"title":"Capitulation confirmed: “criminals only”","description":"Nick says withdrawing agents, ending patrols, and narrowing targets guarantees fewer deportations and proves the left successfully vetoed policy."},{"range":{"start":"01:06:18","end":"01:20:56"},"title":"Why Republicans won’t stop immigration","description":"He claims GOP donors and business interests depend on cheap foreign labor, citing decades of Republican immigration expansion and amnesty."},{"range":{"start":"01:20:56","end":"01:31:30"},"title":"Burn it down: refuse to bail out the GOP","description":"Nick calls to politically destroy complicit Republicans, predicts midterm collapse and Democratic investigations, and urges supporters to stay home in 2026."},{"range":{"start":"01:31:30","end":"02:51:28"},"title":"Super chats","description":"Nick reacts to audience messages, feuds, culture-war topics, and personal questions while promoting upcoming content and merch."}],"moments":[{"start":"01:27","end":"04:39","moment":"Nick says Trump’s NBC interview proves mass deportations are over, with “criminals only,” body cams, and ICE withdrawals confirming surrender."},{"start":"11:45","end":"14:12","moment":"He erupts at JD Vance condemning him, mocking the “eat shit” line and declaring himself officially “Never Vance.”"},{"start":"17:52","end":"18:23","moment":"Nick announces a coming Epstein-focused special mapping alleged connections to figures around the administration."},{"start":"25:39","end":"28:25","moment":"He jokes about being “vindicated” on e-girl/OnlyFans relationship warnings, then pivots to “no e-girls, not even once.”"},{"start":"36:44","end":"38:46","moment":"Reading the BBC recap, he highlights Trump’s “softer touch,” Holman’s 700-agent drawdown, and nationwide body-cam rollout as policy retreat."},{"start":"39:25","end":"41:12","moment":"Nick revisits the “day one raids” promise and says the pattern of postponement and excuses shows how the scam always starts."},{"start":"47:23","end":"49:20","moment":"He argues the administration used provocative optics instead of real deportation capacity, which activated and unified the left into resistance."},{"start":"01:06:08","end":"01:06:18","moment":"Nick delivers his thesis: the Republican Party was never anti-immigration because donors profit from foreign labor."},{"start":"01:18:15","end":"01:20:01","moment":"He calls to “burn the Republican Party to the ground,” saying supporters get betrayed while elites get contracts, money, and foreign priorities."}],"superChatHighlights":[{"start":"01:33:35","end":"01:43:19","highlight":"He answers a super chat about Tucker/Candice by claiming both snaked him, calling Tucker a fake persona and “spook,” and mocking their behavior."},{"start":"01:49:38","end":"01:52:23","highlight":"Nick rants about modern TV shows being endless scenes of men apologizing to women, then says he wants a show where the wife gets outplayed and punished."},{"start":"02:02:00","end":"02:04:20","highlight":"He reacts flirtatiously to a “female army officer” super chat, riffing on uniforms and jokingly “standing down” while keeping it comedic."},{"start":"02:12:24","end":"02:12:39","highlight":"He reads an over-the-top “Achilles/Troy” praise message and calls it painfully cringe, questioning who writes that sincerely."},{"start":"02:31:20","end":"02:33:31","highlight":"Nick melts down over pedantic, low-IQ super chat nitpicking, describing the segment as psychological torture and saying it’s like living in hell."},{"start":"02:41:02","end":"02:46:12","highlight":"He unexpectedly turns reflective, reminiscing about Model UN and youth, saying he misses the simplicity and how life only moves forward."}]},{"fileName":"AF 2026-02-06 1636","summary":"Fuentes argues that viral “Epstein files” discourse is dominated by sensational hoaxes and transcription/data errors that manufacture an occult “Satanic pedophile” myth, which he says functions as a diversion. He lays out what he calls the real Jeffrey Epstein: a Jewish fixer embedded in a transnational Jewish financial, political, and intelligence patronage network, funded and legitimized by Jewish billionaires and connected to Israeli military intelligence and U.S. defense-tech. He traces Epstein’s rise through benefactors like Leon Black and Les Wexner, ties to figures like Ehud Barak and Ronald Lauder, and links into contemporary U.S. politics via Palantir/Peter Thiel and the Trump-era power structure.","url":"https://americafirst.plus/watch/the-truth-about-jeffrey-epstein-jewish-fixer","topicMap":["Epstein files","Jewish networks","Hoaxes debunking","Israeli intelligence","Ehud Barak","Leon Black","Les Wexner","Ronald Lauder","Peter Thiel","Palantir","JD Vance","Trump administration"],"chapters":[{"range":{"start":"00:00","end":"07:37"},"title":"Epstein focus and the “missing word”","description":"Fuentes previews an Epstein deep-dive, arguing the key overlooked organizing principle is Jewish identity rather than occult sensationalism."},{"range":{"start":"07:37","end":"12:04"},"title":"Defining terms and rejecting the myth","description":"He explains why precise categories matter and says the public narrative is being steered toward unproven extremes."},{"range":{"start":"12:04","end":"18:53"},"title":"Viral hoaxes and file errors","description":"He walks through examples like “Baal/bank name,” “30 between 6 and 7,” and “=9” corruption to show how fake claims spread."},{"range":{"start":"18:53","end":"26:03"},"title":"Limited hangout and the “real Epstein” frame","description":"Fuentes argues sensational claims act as a diversion, while the evidence points to Epstein as a fixer serving elite interests."},{"range":{"start":"26:03","end":"39:06"},"title":"Israel angle: Barak, intelligence, and deals","description":"He highlights Epstein’s extensive ties to Ehud Barak and claims the emails show practical military/intelligence contracting, not mysticism."},{"range":{"start":"39:06","end":"47:42"},"title":"“Not a monolith” rebuttal and Palantir bridge","description":"He argues Israeli left/right distinctions don’t change the network’s function, then connects Barak to Thiel/Palantir via Epstein."},{"range":{"start":"47:42","end":"01:04:52"},"title":"Leon Black: money, blackmail, and Trump-world links","description":"Fuentes claims Black paid Epstein vast sums tied to discretion/blackmail and traces Black’s lineage and connections into Trump-era policy."},{"range":{"start":"01:04:52","end":"01:16:24"},"title":"Les Wexner and the pro-Israel billionaire network","description":"He describes Wexner as Epstein’s foundational patron and portrays Wexner institutions as grooming and coordinating pro-Israel elite influence."},{"range":{"start":"01:16:24","end":"01:27:22"},"title":"Origin story: Dalton School, Barr, and Bear Stearns","description":"Fuentes traces Epstein’s entry through elite education and finance, arguing the early pipeline shows a constructed patronage/intel pathway."},{"range":{"start":"01:27:22","end":"01:37:10"},"title":"Thiel, Vance, Ohio, and the defense-tech machine","description":"He connects Epstein–Thiel ties to JD Vance’s rise, Ohio political dynamics, and a broader defense-tech ecosystem."},{"range":{"start":"01:37:10","end":"01:55:00"},"title":"Closing synthesis and media diversion critique","description":"Fuentes concludes the files show organized Jewish billionaire power and says major influencers avoid this by pushing sci‑fi conspiracies."},{"range":{"start":"01:55:00","end":"02:55:39"},"title":"Super chats","description":"Fuentes reacts to audience questions, jokes, insults, and political/cultural prompts, including extended tangents and callouts."}],"moments":[{"start":"02:48","end":"05:13","moment":"He says the Epstein myth distracts from the defining reality: Epstein as a Jewish fixer sustained by Jewish identity and networks."},{"start":"12:04","end":"17:04","moment":"He debunks viral “Baal,” “30 between 6 and 7,” and “=9 years old” claims as transcription/data corruption driving fake narratives."},{"start":"22:10","end":"25:17","moment":"He frames the sensational Epstein story as a limited hangout meant to obfuscate what’s in plain sight in the emails."},{"start":"29:47","end":"33:07","moment":"He highlights Netanyahu’s denial and argues it still points to Barak’s deep intelligence role, making the distinction meaningless."},{"start":"44:34","end":"47:35","moment":"He claims Epstein tried to place Ehud Barak into Palantir via Peter Thiel, warning this would embed Israeli intel into U.S. systems."},{"start":"51:51","end":"55:17","moment":"He argues Epstein’s huge fees from Leon Black only make sense as blackmail/leverage tied to financial and sexual discretion."},{"start":"01:10:00","end":"01:16:24","moment":"He portrays Wexner’s foundation and “mega group” as a coordinated billionaire apparatus shaping U.S. policy and pro-Israel messaging."},{"start":"01:21:18","end":"01:25:01","moment":"He traces Epstein’s start to Dalton School via Donald Barr and Bear Stearns, arguing the pipeline shows elite network construction."},{"start":"01:44:42","end":"01:47:29","moment":"He attacks Tucker/Ian Carroll for focusing on Pizzagate-style diversions and insists the files point directly to organized Jewry."}],"superChatHighlights":[{"start":"02:00:20","end":"02:00:41","highlight":"A donor posts an aggressive, profane rant with threats and ethnic slurs; Fuentes rejects the violence but thanks him for the big super chat."},{"start":"02:03:08","end":"02:06:22","highlight":"Fuentes launches into a long, mean-spirited “Wife Jack” rant, claiming vindication and describing extreme anti-meme cartoons and backlash."},{"start":"02:17:25","end":"02:17:40","highlight":"He mocks a “White History Month” super chat as edgy and insults the sender while still acknowledging the donation."},{"start":"02:19:25","end":"02:29:16","highlight":"He goes on an extended furious tirade about Candace Owens claiming astral projection and a “third eye,” calling it absurd and humiliating."},{"start":"02:32:07","end":"02:33:18","highlight":"He says he doesn’t need broad support, only a smaller “tougher, louder, meaner” base, and claims “simps and women” can’t oppose his movement."},{"start":"02:35:06","end":"02:35:41","highlight":"He brutally dismisses a viewer recommending the show Dexter, saying the commenter is exactly the kind of person he avoids."}]},{"fileName":"AF 2026-02-09 1637","summary":"Nick Fuentes argues that the Super Bowl halftime backlash shows the right has become bitter, overly political, and culturally unappealing, while the left has adapted into a more “post-woke” posture that can win normies by seeming inclusive and less antagonistic. He then pivots to the Epstein files, saying the partial, redacted release contains no courtroom “smoking gun” but clearly indicates a larger cover-up, and he calls for full disclosure, naming of the six “likely incriminated” collaborators, and aggressive investigation. Fuentes concludes the Trump DOJ’s prior denial of the files proves an active deception that destroys public trust and threatens to become a Watergate-level scandal for the administration.","url":"https://americafirst.plus/watch/spanish-superbowl-latino-degenerate-soils-sacred-halftime-tradition","topicMap":["Super Bowl halftime","Conservative backlash","Post-woke left","Cultural politics","Trump aura","Epstein files","DOJ redactions","Massie Khanna","Unnamed accomplices","Trump DOJ cover-up","Pam Bondi","Impeachment"],"chapters":[{"range":{"start":"00:00","end":"07:01"},"title":"Show preview: Epstein files and Iran talks","description":"Fuentes tees up new Epstein disclosures, congressional pressure to unredact names, and briefly outlines high-stakes U.S.-Iran negotiations and Israel’s lobbying."},{"range":{"start":"07:01","end":"09:24"},"title":"Housekeeping and promotions","description":"He plugs Rumble engagement, merch, and subscriptions, framing the show’s ecosystem and support options."},{"range":{"start":"09:24","end":"12:02"},"title":"Super Bowl halftime rage-bait to serious take","description":"He jokes about the halftime show discourse, then shifts to an earnest critique of conservative overreaction."},{"range":{"start":"12:02","end":"19:38"},"title":"Why the halftime show wasn’t “militantly woke”","description":"He argues the Latin-themed show was largely inoffensive to normies, implicitly political but not an overt taunt, unlike prior woke spectacles."},{"range":{"start":"19:38","end":"28:34"},"title":"The rise of “post-woke” leftism","description":"He claims normies soured on 2021–2022 woke contradictions, and the left adapted by loosening speech codes and rebranding to appeal to white men."},{"range":{"start":"28:34","end":"35:36"},"title":"Turning Point’s Kid Rock counter-show as self-ghettoizing","description":"He says the conservative alternative was joyless, culture-war obsessed, and loser-coded compared to the upbeat mainstream production."},{"range":{"start":"35:36","end":"44:29"},"title":"Trump’s cultural “secret ingredient” and the right losing the initiative","description":"He argues Trump succeeded by projecting celebrity aura and forward energy, and warns the right can’t regain culture by doubling down on grumpy chud politics."},{"range":{"start":"44:29","end":"50:34"},"title":"Epstein files: why the dump raises more questions than answers","description":"He says the released material lacks a prosecutable smoking gun, so the correct move is demanding full transparency and a real investigation."},{"range":{"start":"50:34","end":"56:03"},"title":"Congress access and the six redacted “likely incriminated” names","description":"He covers the DOJ reading-room rules, Massie/Khanna’s pressure campaign, and the claim that six collaborators’ names are being withheld."},{"range":{"start":"56:03","end":"59:36"},"title":"Call to action: unredact, name, and investigate everyone involved","description":"He urges pushing Congress and DOJ to release all files and pursue warrants/subpoenas, listing prominent figures he says warrant scrutiny."},{"range":{"start":"59:36","end":"01:09:30"},"title":"Trump DOJ cover-up and impeachment demand","description":"He argues the administration lied by claiming no files existed, then used “victim protection” as cover, and says Bondi/Patel must be impeached as trust collapses."},{"range":{"start":"01:09:30","end":"02:05:16"},"title":"Super chats and audience back-and-forth","description":"He responds to viewer prompts, revisits halftime-show arguments, riffs on movement culture, and closes out the episode."}],"moments":[{"start":"12:17","end":"14:03","moment":"He blasts the conservative Kid Rock alternative as so bad he refuses to “pretend to like it” for patriot points."},{"start":"20:19","end":"24:12","moment":"He claims the culture shifted after 2021 as normies saw woke contradictions in BLM riots, anti-white hatred, COVID hypocrisy, and Ukraine."},{"start":"24:22","end":"28:28","moment":"He argues Democrats are integrating MAGA-style authenticity and outreach to white men, making a “post-woke” left more formidable."},{"start":"31:09","end":"34:14","moment":"He says conservatives “took their ball and went home,” making themselves look bitter and overly political compared to mainstream spectacle."},{"start":"38:09","end":"41:18","moment":"He explains Trump’s 2016 success as cultural aura—celebrity, wealth, and futurism—then warns the right has lost that edge."},{"start":"45:03","end":"47:25","moment":"He insists the released Epstein files lack a courtroom smoking gun, so the real strategy is forcing full disclosure and investigation."},{"start":"50:40","end":"54:06","moment":"He highlights Massie/Khanna’s claim that DOJ redacted six “likely incriminated” collaborators and may be violating the transparency law."},{"start":"59:36","end":"01:03:26","moment":"He says the Trump DOJ’s prior claim that “no files exist” proves an active cover-up, not a misunderstanding."},{"start":"01:03:26","end":"01:07:54","moment":"He calls for impeaching Bondi and Patel, says Trump can’t be trusted to police Epstein-linked elites, and predicts a Watergate-level collapse."}],"superChatHighlights":[{"start":"01:11:19","end":"01:12:46","highlight":"He goes on a mean rant agreeing with a donor that “poor people” complain instead of working, calling them low-IQ and telling them to “have money.”"},{"start":"01:32:17","end":"01:33:05","highlight":"Asked about interviewing Iranian “revolution” leaders, he explodes, calls them traitors, and says he hopes Iran crushes them."},{"start":"01:36:21","end":"01:41:29","highlight":"He erupts at a donor who wants him to repeat the standard “halftime should be English” take, calling the audience low-IQ and telling them to watch Matt Walsh/Blaze instead."},{"start":"01:44:41","end":"01:48:18","highlight":"He mocks halftime boycotters as broke losers with greasy hands, contrasting them with rich people casually enjoying the spectacle while building businesses."},{"start":"01:48:26","end":"01:50:23","highlight":"He answers why Matt Walsh stands with Ben Shapiro by saying it’s because Shapiro is Jewish, then riffs that Jews can’t be trusted even if liked."}]},{"fileName":"AF 2026-02-10 1638","summary":"Nick Fuentes argues the U.S. is again on the brink of a regime-change war with Iran because Washington’s demand that Iran permanently surrender uranium enrichment is irreconcilable with Iran’s insistence that enrichment is a non-negotiable red line. He says Israel is actively working to sabotage any nuclear-only deal by pushing to add missile and proxy restrictions and by lobbying Trump directly, while a new bloc of Middle Eastern states is pressuring the U.S. to cut a deal to avoid regional destabilization. He also frames the Epstein-file revelations about Commerce Secretary Howard Lutnick’s alleged lies as a self-inflicted crisis that will dog the Trump government for years.","url":"https://americafirst.plus/watch/iran-negotiations-flop-us-headed-to-war-after-failed-talks","topicMap":["Iran negotiations","Uranium enrichment","Israel lobbying","Regime change war","Middle East coalition","Missiles and proxies","Military buildup","Super Bowl halftime","White power politics","Epstein files","Howard Lutnick"],"chapters":[{"range":{"start":"00:00","end":"04:55"},"title":"Show preview: Iran talks and Epstein fallout","description":"Nick tees up Iran nuclear negotiations as a last-ditch effort to avert war and previews the Howard Lutnick–Epstein controversy as a major problem for Trump’s administration."},{"range":{"start":"04:55","end":"12:49"},"title":"Housekeeping, merch, and new suit","description":"He promotes the show, subscriptions, and merch, then riffs on buying new suits and reacts to chat insults about his tie and pacing."},{"range":{"start":"12:49","end":"23:15"},"title":"Halftime show postscript: strength vs surrender","description":"He revisits the Super Bowl/Turning Point comparison, arguing the “country” alternative projects weakness while the other side projects confidence and inevitability."},{"range":{"start":"23:15","end":"37:33"},"title":"Call to power: politics as zero-sum conflict","description":"Nick says white Americans can’t “opt out” of politics, framing the moment as civilizational struggle requiring power, ambition, and willingness to fight."},{"range":{"start":"37:33","end":"43:48"},"title":"Iran negotiations: why the U.S. is on a war footing","description":"He outlines Trump’s ultimatum, the Oman meeting as mostly procedural, and the military buildup meant to enable a decisive strike if talks fail."},{"range":{"start":"43:48","end":"47:28"},"title":"The three files: proxies, missiles, and nuclear enrichment","description":"Nick breaks down the core disputes—regional proxies, ballistic missiles, and especially uranium enrichment as the central sticking point."},{"range":{"start":"47:28","end":"53:52"},"title":"Why enrichment is the impasse","description":"He explains Iran’s insistence on enrichment as a hedge against regime change and the U.S. refusal as a nonstarter due to breakout risk."},{"range":{"start":"53:52","end":"59:41"},"title":"How last year’s breakdown led to strikes and renewed pressure","description":"Nick recounts deadlines, Israel-Iran exchanges, U.S. strikes on key sites, and the current escalation with carriers, bombers, and sanctions."},{"range":{"start":"59:41","end":"01:06:28"},"title":"Regional intercession: a new Middle East axis","description":"He argues Turkey, Egypt, Qatar, Saudi Arabia, UAE, Oman, and Pakistan are pushing for a deal to avoid destabilization and Israeli dominance."},{"range":{"start":"01:06:28","end":"01:09:27"},"title":"Netanyahu in Washington: sabotage risk and bleak outlook","description":"Nick says Israel will try to scuttle any agreement and predicts Trump can’t resist, making war likely even if delayed."},{"range":{"start":"01:09:27","end":"02:00:10"},"title":"Super chats","description":"He takes audience questions and comments, riffing on culture-war topics, conspiracies, personal jabs, and broader political grievances."}],"moments":[{"start":"01:15","end":"03:49","moment":"He says U.S.-Iran positions on uranium enrichment are irreconcilable and Israel is working to sabotage talks by adding missiles and proxies."},{"start":"05:35","end":"07:15","moment":"He claims the Epstein file dump shows Howard Lutnick lied about post-conviction contact with Epstein and says it will cripple Trump’s government."},{"start":"16:49","end":"21:18","moment":"He contrasts the halftime shows as “flag planting” vs white retreat, calling the conservative alternative a public surrender."},{"start":"21:23","end":"23:32","moment":"He argues white Americans can’t just “watch the game” because that lifestyle requires political power, borders, and force."},{"start":"23:32","end":"26:20","moment":"He frames the situation as a civil war/zero-sum struggle where groups that seize power will take land, culture, and security from others."},{"start":"37:53","end":"39:18","moment":"He says Trump wants a “decisive” killing blow against Iran’s regime, not merely a limited strike, making the outcome unpredictable."},{"start":"49:36","end":"52:16","moment":"He explains Iran’s enrichment insistence as a hedge against regime change and says the U.S. refusal makes a deal structurally impossible."},{"start":"56:38","end":"59:18","moment":"He argues multiple Middle Eastern states are lobbying for a deal because a U.S. war in Iran would destabilize their regimes and economies."},{"start":"01:03:09","end":"01:05:15","moment":"He says Netanyahu’s visit is meant to scuttle diplomacy and that U.S. signaling Israel access to Trump will only deepen Iran’s distrust."}],"superChatHighlights":[{"start":"01:19:22","end":"01:21:55","highlight":"He launches into an extreme rant claiming women are America’s top political enemy and jokes about imprisoning them first and “sorting it out” later."},{"start":"01:23:13","end":"01:26:59","highlight":"He goes off on women’s “TikTok restaurant” tastes, mocking vodka pasta, espresso martinis, and trendy dining as shallow status theater."},{"start":"01:28:01","end":"01:28:22","highlight":"He snaps at a chatter, calling them an idiot and insisting he never changed his stance, saying newcomers accuse him of shifting without knowing his show."},{"start":"01:41:38","end":"01:45:29","highlight":"He rejects “principles” as a priority and says the only principle is winning at any cost, arguing losing means extinction and total defeat."},{"start":"01:46:01","end":"01:48:18","highlight":"He sarcastically mocks a “crisis actor” theory by describing an absurdly coordinated hit-squad scenario with matching shirts, lanyards, and rehearsals."},{"start":"01:58:00","end":"01:59:19","highlight":"He reacts to a provocative super chat allegedly from Sneako, doubts it’s real, then laughs it off as rage-bait while still playing along."}]}]
+  </script>
+  <script>
+
+(function(){
+  const payloadEl = document.getElementById('payload');
+  const data = JSON.parse(payloadEl.textContent || '[]');
+
+  const listEl = document.getElementById('list');
+  const qEl = document.getElementById('q');
+  const sortNameBtn = document.getElementById('sortName');
+  const sortChBtn = document.getElementById('sortCh');
+
+  const epTitle = document.getElementById('epTitle');
+  const epMeta = document.getElementById('epMeta');
+
+  const summaryCard = document.getElementById('summaryCard');
+  const topicCard = document.getElementById('topicCard');
+  const chaptersCard = document.getElementById('chaptersCard');
+  const momentsCard = document.getElementById('momentsCard');
+  const superCard = document.getElementById('superCard');
+
+  const countsEl = document.getElementById('counts');
+  const summaryEl = document.getElementById('summary');
+  const topicCloud = document.getElementById('topicCloud');
+
+  const chaptersEl = document.getElementById('chapters');
+  const momentsEl = document.getElementById('moments');
+  const superEl = document.getElementById('superChats');
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  document.body.appendChild(toast);
+
+  function showToast(text){
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove('show'), 1100);
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast('Copied: ' + text);
+    }catch{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast('Copied: ' + text);
+    }
+  }
+
+	function esc(s){
+	  return String(s || '').replace(/[&<>"']/g, function(c){
+	    return ({
+	      '&': '&amp;',
+	      '<': '&lt;',
+	      '>': '&gt;',
+	      '"': '&quot;',
+	      "'": '&#39;'
+	    })[c] || c;
+	  });
+	}
+
+  function parseTimeToSeconds(t)
+		{
+			// accepts mm:ss, hh:mm:ss, and variants with leading zeros
+			const s = String(t || '').trim();
+			if (!s) return 0;
+			const parts = s.split(':').map(p => p.trim());
+			if (parts.length === 2)
+			{
+				const mm = parseInt(parts[0], 10) || 0;
+				const ss = parseInt(parts[1], 10) || 0;
+				return (mm * 60) + ss;
+			}
+			if (parts.length === 3)
+			{
+				const hh = parseInt(parts[0], 10) || 0;
+				const mm = parseInt(parts[1], 10) || 0;
+				const ss = parseInt(parts[2], 10) || 0;
+				return (hh * 3600) + (mm * 60) + ss;
+			}
+			return 0;
+		}
+
+		function topicClass(i)
+		{
+			if (i <= 2) return 'topic topicXL';
+			if (i <= 6) return 'topic topicL';
+			if (i <= 12) return 'topic topicM';
+			return 'topic topicS';
+		}
+
+		let sortMode = 'name';
+		let activeIndex = -1;
+
+		function buildSearchHaystack(ep)
+		{
+			const parts = [];
+			parts.push(ep.fileName || '');
+			parts.push(ep.summary || '');
+			parts.push(ep.url || '');
+			(ep.topicMap || []).forEach(t => parts.push(t || ''));
+
+			(ep.chapters || []).forEach(c => {
+				parts.push((c.range && c.range.start) ? c.range.start : '');
+				parts.push((c.range && c.range.end) ? c.range.end : '');
+				parts.push(c.title || '');
+				parts.push(c.description || '');
+			});
+
+			(ep.moments || []).forEach(m => {
+				parts.push(m.start || '');
+				parts.push(m.end || '');
+				parts.push(m.moment || '');
+			});
+
+			(ep.superChatHighlights || []).forEach(h => {
+				parts.push(h.start || '');
+				parts.push(h.end || '');
+				parts.push(h.highlight || '');
+			});
+
+			return parts.join(' ').toLowerCase();
+		}
+
+		const hay = data.map(buildSearchHaystack);
+
+		function getFilteredIndices()
+		{
+			const q = (qEl.value || '').trim().toLowerCase();
+			let idx = data.map((_, i) => i);
+
+			if (q.length > 0)
+			{
+				idx = idx.filter(i => hay[i].includes(q));
+			}
+
+			if (sortMode === 'name')
+			{
+				idx.sort((a, b) => {
+					const an = (data[a].fileName || '').toLowerCase();
+					const bn = (data[b].fileName || '').toLowerCase();
+					return an.localeCompare(bn);
+				});
+			}
+			else if (sortMode === 'chapters')
+			{
+				idx.sort((a, b) => {
+					const ac = (data[a].chapters || []).length;
+					const bc = (data[b].chapters || []).length;
+					return bc - ac;
+				});
+			}
+
+			return idx;
+		}
+
+		function renderList()
+		{
+			const idx = getFilteredIndices();
+			listEl.innerHTML = '';
+
+			idx.forEach(i => {
+				const ep = data[i];
+				const ch = (ep.chapters || []).length;
+				const mo = (ep.moments || []).length;
+				const sc = (ep.superChatHighlights || []).length;
+
+				const div = document.createElement('div');
+				div.className = 'item' + (i === activeIndex ? ' active' : '');
+				div.setAttribute('data-i', String(i));
+
+				div.innerHTML =
+					'<div class="itemName">' + esc(ep.fileName || '') + '</div>' +
+					'<div class="itemMeta">' +
+						'<span class="badge badgeHot">' + ch + ' chapters</span>' +
+						'<span class="badge">' + mo + ' moments</span>' +
+						'<span class="badge">' + sc + ' superchats</span>' +
+					'</div>';
+
+				div.addEventListener('click', () => selectEpisode(i));
+				listEl.appendChild(div);
+			});
+
+			if (activeIndex === -1 && idx.length > 0)
+			{
+				selectEpisode(idx[0], true);
+			}
+		}
+
+		function clearEpisode()
+		{
+			activeIndex = -1;
+			epTitle.textContent = 'Select an episode';
+			epMeta.textContent = '';
+
+			summaryCard.style.display = 'none';
+			topicCard.style.display = 'none';
+			chaptersCard.style.display = 'none';
+			momentsCard.style.display = 'none';
+			superCard.style.display = 'none';
+
+			summaryEl.textContent = '';
+			topicCloud.innerHTML = '';
+			chaptersEl.innerHTML = '';
+			momentsEl.innerHTML = '';
+			superEl.innerHTML = '';
+
+			renderList();
+		}
+
+		function openAt(url, startTime)
+		{
+			const sec = parseTimeToSeconds(startTime);
+			console.log(`  opening ep to ${startTime}`);
+
+			if (!url) return false;
+
+			const u = String(url);
+			const joiner = u.includes('?') ? '&' : '?';
+			const finalUrl = u + joiner + 't=' + sec;
+
+			console.log(`  finalUrl ${finalUrl}`);
+
+			const w = window.open(finalUrl, '_blank');
+			if (w) w.focus();
+			return true;
+		}
+
+		function renderRangeCard(containerEl, items, kind, ep)
+		{
+			containerEl.innerHTML = '';
+			(items || []).forEach((it, idx) => {
+				const start = it.start || (it.range && it.range.start) || '';
+				const end = it.end || (it.range && it.range.end) || '';
+				const range = (start + ' - ' + end).trim();
+
+				const title = it.title || '';
+				const desc = it.description || it.moment || it.highlight || '';
+
+				const art = document.createElement('article');
+				art.className = 'seg';
+
+				art.innerHTML =
+					'<div class="segRow">' +
+						'<div class="segIndex">' + (idx + 1) + '</div>' +
+						'<div class="segMain">' +
+							'<div class="segTop">' +
+								'<div class="segTitle">' + esc(title || (kind === 'moments' ? 'Moment' : kind === 'super' ? 'Highlight' : 'Chapter')) + '</div>' +
+								'<div class="segRange"><span class="kbd">' + esc(range) + '</span></div>' +
+							'</div>' +
+							'<div class="segDesc">' + esc(desc || '') + '</div>' +
+						'</div>' +
+					'</div>';
+
+					art.addEventListener('click', (ev) => {
+					// open url?t=start (if ep.url exists)
+
+					console.log(`ev click handler ${ev}`);
+					
+					if (ev)
+					{
+						console.log(`opening ep ${ep.url} at ${start}`);
+
+						if (openAt(ep.url, start))
+						{
+							showToast('Opened at ' + start);
+							return;
+						}
+					}
+				});
+
+				containerEl.appendChild(art);
+			});
+		}
+
+		function selectEpisode(i, silent)
+		{
+			activeIndex = i;
+
+			const ep = data[i] || { }
+			;
+			const ch = (ep.chapters || []).length;
+			const mo = (ep.moments || []).length;
+			const sc = (ep.superChatHighlights || []).length;
+			const tm = (ep.topicMap || []).length;
+
+			epTitle.textContent = ep.fileName || '(untitled)';
+			epMeta.textContent =
+				ch + ' chapters | ' + mo + ' moments | ' + sc + ' superchats' +
+				(ep.url ? (' | url ok') : '');
+
+			summaryCard.style.display = '';
+			countsEl.textContent = ch + ' ch | ' + mo + ' moments | ' + sc + ' sc';
+			summaryEl.textContent = ep.summary || '';
+
+			// topic map
+			topicCloud.innerHTML = '';
+			if (tm > 0)
+			{
+				topicCard.style.display = '';
+				(ep.topicMap || []).forEach((t, idx) => {
+					const span = document.createElement('span');
+					span.className = topicClass(idx);
+					span.textContent = t || '';
+					topicCloud.appendChild(span);
+				});
+			}
+			else
+			{
+				topicCard.style.display = 'none';
+			}
+
+			// cards
+			if (ch > 0)
+			{
+				chaptersCard.style.display = '';
+				renderRangeCard(chaptersEl, ep.chapters, 'chapters', ep);
+			}
+			else
+			{
+				chaptersCard.style.display = 'none';
+				chaptersEl.innerHTML = '';
+			}
+
+			if (mo > 0)
+			{
+				momentsCard.style.display = '';
+				renderRangeCard(momentsEl, ep.moments, 'moments', ep);
+			}
+			else
+			{
+				momentsCard.style.display = 'none';
+				momentsEl.innerHTML = '';
+			}
+
+			if (sc > 0)
+			{
+				superCard.style.display = '';
+				renderRangeCard(superEl, ep.superChatHighlights, 'super', ep);
+			}
+			else
+			{
+				superCard.style.display = 'none';
+				superEl.innerHTML = '';
+			}
+
+			if (!silent)
+			{
+				renderList();
+				try { location.hash = '#i=' + i; } catch { }
+			}
+			else
+			{
+				renderList();
+			}
+		}
+
+		function tryLoadHash()
+		{
+			const h = (location.hash || '').trim();
+			const m = h.match(/#i=(\d+)/);
+    if (!m) return false;
+			const i = parseInt(m[1], 10);
+			if (isNaN(i) || i < 0 || i >= data.length) return false;
+			selectEpisode(i, true);
+			return true;
+		}
+
+
+	qEl.addEventListener('input', ()=>renderList());
+
+  sortNameBtn.addEventListener('click', ()=>{
+    sortMode = 'name';
+    renderList();
+});
+
+sortChBtn.addEventListener('click', () => {
+	sortMode = 'chapters';
+	renderList();
+});
+
+window.addEventListener('hashchange', () => { tryLoadHash(); });
+
+if (data.length === 0)
+{
+	clearEpisode();
+	return;
+}
+
+renderList();
+if (!tryLoadHash())
+{
+	// default selection already handled in renderList()
+}
+})(); 
+  </script>
+</body>
+</html>
